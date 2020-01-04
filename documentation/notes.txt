@@ -1,0 +1,23 @@
+Spiecies Fields
+- Title / Common name
+- Papiamento name
+- Scientific/ latin name
+- Category: 
+    - Succelent plants
+    - Shrubs/small trees
+    - Herbs
+    - Grasses
+    - Vines
+    - Mangroves
+    - Terrestial trees
+- Family:
+- Description
+- Link
+- Geo
+- Protected Locally
+- Origin:
+    - Introduced/ Exotic
+    - Invasive
+    - Native
+    - Endemic Aruba
+    - Endemic ABC islands

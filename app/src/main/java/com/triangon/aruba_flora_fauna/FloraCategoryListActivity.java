@@ -3,6 +3,9 @@ package com.triangon.aruba_flora_fauna;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
+import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.requests.FloraCategoryApi;
 import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
@@ -22,27 +27,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FloraCategoryListActivity extends BaseActivity  {
+public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
 
     private static final String TAG = "FloraCategoryListActivi";
+
     private FloraCategoryListViewModel mFloraCategoryListViewModel;
+    private RecyclerView mRecyclerView;
+    private FloraCategoryRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flora_category_list);
 
+        mRecyclerView = findViewById(R.id.rv_flora_category_list);
         mFloraCategoryListViewModel = ViewModelProviders.of(this).get(FloraCategoryListViewModel.class);
 
+        initRecyclerView();
         subscribeObservers();
+        testRetrofitRequest();
 
-        findViewById(R.id.test).setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                testRetrofitRequest();
-            }
-        });
     }
 
     private void getFloraCategoriesApi() {
@@ -53,9 +57,20 @@ public class FloraCategoryListActivity extends BaseActivity  {
         mFloraCategoryListViewModel.getFloraCategories().observe(this, new Observer<List<FloraCategory>>() {
             @Override
             public void onChanged(List<FloraCategory> floraCategories) {
-                System.out.println(floraCategories.get(0).getName());
+                if(floraCategories != null) {
+                    System.out.println(floraCategories.get(0).getName());
+                    mAdapter.setFloraCategories(floraCategories);
+                }
             }
         });
+    }
+
+    private void initRecyclerView() {
+        mAdapter = new FloraCategoryRecyclerAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     private void testRetrofitRequest() {
@@ -94,5 +109,10 @@ public class FloraCategoryListActivity extends BaseActivity  {
 
             }
         });
+    }
+
+    @Override
+    public void onFloraCategoryClick(int position) {
+
     }
 }
