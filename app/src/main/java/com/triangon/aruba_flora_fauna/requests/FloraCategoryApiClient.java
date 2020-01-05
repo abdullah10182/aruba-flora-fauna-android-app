@@ -21,11 +21,11 @@ import static com.triangon.aruba_flora_fauna.utils.Constants.NETWORK_TIMEOUT;
 
 public class FloraCategoryApiClient {
 
-    private static final String TAG = "FloraCategoryApiClient";
+    private static final String TAG = "CategoryApiClientApi";
 
     private static FloraCategoryApiClient instance;
     private MutableLiveData<List<FloraCategory>> mFloraCategories;
-    private RetrieveFloraCategoriesRunnalble mRetrieveFloraCategoriesRunnalble;
+    private RetrieveFloraCategoriesRunnable mRetrieveFloraCategoriesRunnable;
 
     public static FloraCategoryApiClient getInstance() {
         if(instance == null) {
@@ -43,11 +43,11 @@ public class FloraCategoryApiClient {
     }
 
     public void getFloraCategoriesApi() {
-        if(mRetrieveFloraCategoriesRunnalble != null) {
-             mRetrieveFloraCategoriesRunnalble = null;
+        if(mRetrieveFloraCategoriesRunnable != null) {
+             mRetrieveFloraCategoriesRunnable = null;
         }
-        mRetrieveFloraCategoriesRunnalble = new RetrieveFloraCategoriesRunnalble();
-        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraCategoriesRunnalble );
+        mRetrieveFloraCategoriesRunnable = new RetrieveFloraCategoriesRunnable();
+        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraCategoriesRunnable);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
@@ -58,12 +58,12 @@ public class FloraCategoryApiClient {
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
-    private class RetrieveFloraCategoriesRunnalble implements Runnable{
+    private class RetrieveFloraCategoriesRunnable implements Runnable{
 
         //private String parameterExample
         boolean cancelRequest;
 
-        public RetrieveFloraCategoriesRunnalble() {
+        public RetrieveFloraCategoriesRunnable() {
             cancelRequest = false;
         }
 

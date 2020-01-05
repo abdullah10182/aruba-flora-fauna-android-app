@@ -1,20 +1,13 @@
 package com.triangon.aruba_flora_fauna.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import android.graphics.Rect;
+import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
@@ -23,13 +16,9 @@ import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
-import com.triangon.aruba_flora_fauna.requests.FloraCategoryApi;
-import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
-import com.triangon.aruba_flora_fauna.requests.responses.FloraCategoryListResponse;
+import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
@@ -122,8 +111,12 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
     @Override
     public void onFloraCategoryClick(int position) {
-        System.out.println(position);
         String text = mAdapter.getFloraCategories().get(position).getName();
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, FloraSpeciesListActivity.class);
+        String categoryId = mAdapter.getFloraCategories().get(position).getId();
+        intent.putExtra("categoryId", categoryId);
+        startActivity(intent);
     }
 }

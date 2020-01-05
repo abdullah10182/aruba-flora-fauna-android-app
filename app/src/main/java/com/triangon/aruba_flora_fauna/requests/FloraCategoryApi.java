@@ -1,6 +1,5 @@
 package com.triangon.aruba_flora_fauna.requests;
 
-import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.requests.responses.FloraCategoryListResponse;
 
 import retrofit2.Call;

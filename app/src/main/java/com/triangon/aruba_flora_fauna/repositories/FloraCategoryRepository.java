@@ -6,7 +6,6 @@ import com.triangon.aruba_flora_fauna.requests.FloraCategoryApiClient;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class FloraCategoryRepository {
 

@@ -6,7 +6,6 @@ import com.triangon.aruba_flora_fauna.repositories.FloraCategoryRepository;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class FloraCategoryListViewModel extends ViewModel {
