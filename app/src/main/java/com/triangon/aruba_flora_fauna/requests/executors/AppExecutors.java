@@ -1,4 +1,4 @@
-package com.triangon.aruba_flora_fauna;
+package com.triangon.aruba_flora_fauna.requests.executors;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

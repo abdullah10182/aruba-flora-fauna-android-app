@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestOptions;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
@@ -56,5 +55,9 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public void setFloraCategories(List<FloraCategory> floraCategories) {
         mFloraCategories = floraCategories;
         notifyDataSetChanged();
+    }
+
+    public List<FloraCategory> getFloraCategories() {
+        return mFloraCategories;
     }
 }

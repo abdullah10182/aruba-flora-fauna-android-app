@@ -1,12 +1,10 @@
 package com.triangon.aruba_flora_fauna.requests;
 
-import android.app.Service;
 import android.util.Log;
 
-import com.triangon.aruba_flora_fauna.AppExecutors;
+import com.triangon.aruba_flora_fauna.requests.executors.AppExecutors;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.requests.responses.FloraCategoryListResponse;
-import com.triangon.aruba_flora_fauna.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
