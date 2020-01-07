@@ -7,17 +7,16 @@
     tools:context=".activities.FloraCategoryListActivity"
     android:adjustViewBounds="true"
     android:layout_gravity="center"
+    android:background="@color/green_extra_light"
     android:maxWidth="600dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEST TET"/>
-
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_flora_category_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_flora_category_list">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
