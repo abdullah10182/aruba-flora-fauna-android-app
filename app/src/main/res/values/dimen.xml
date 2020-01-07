@@ -2,5 +2,5 @@
 <resources>
     <dimen name="flora_category_thumbnail_width">250dp</dimen>
     <dimen name="flora_category_thumbnail_height">250dp</dimen>
-    <dimen name="flora_category_title_text_size">20sp</dimen>
+    <dimen name="flora_category_title_text_size">18sp</dimen>
 </resources>
