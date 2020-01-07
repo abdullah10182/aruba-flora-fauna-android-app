@@ -68,7 +68,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),columnCount);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 8, true));
+        mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
     }
 
     private void testRetrofitRequest() {
