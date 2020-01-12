@@ -45,14 +45,16 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private FloraCategoryRecyclerAdapter mAdapter;
     private ImageView mLogoToolbar;
     private RelativeLayout mLogoHero;
+    private MenuItem mSearchAction;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flora_category_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mRecyclerView = findViewById(R.id.rv_flora_category_list);
@@ -88,7 +90,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         int columnCount = 2;
         mAdapter = new FloraCategoryRecyclerAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),columnCount);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
@@ -110,7 +111,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         mLogoToolbar = findViewById(R.id.iv_logo_toolbar);
         mLogoHero = findViewById(R.id.iv_logo_hero);
         appBarListener(appBarLayout);
-        mLogoToolbar.setVisibility(View.VISIBLE);
     }
 
     public void appBarListener(AppBarLayout appBarLayout) {
@@ -118,22 +118,34 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(mLogoToolbar.getVisibility() == View.GONE)
+                    mLogoToolbar.setVisibility(View.VISIBLE);
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
                     AnimatorSet set = new AnimatorSet();
-                    int widthOfScreen = appBarLayout.getWidth();
-                    int widthHeroImage = mLogoToolbar.getWidth();
+                    if(mSearchAction != null)
+                        mSearchAction.setVisible(true);
                     set.playTogether(
-                            //ObjectAnimator.ofFloat(mLogoToolbar, "translationX", ((widthOfScreen/2f) - (widthHeroImage/2.5f))).setDuration(300),
-                            ObjectAnimator.ofFloat(mLogoHero, "alpha", 0f).setDuration(200),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "alpha", 1f).setDuration(200)
+                            ObjectAnimator.ofFloat(mLogoHero, "alpha", 0f).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "alpha", 1f).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 0 ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", 0 ).setDuration(400)
                     );
                     set.start();
                 } else if (verticalOffset == 0) {
                     // If expanded, then do this
+                    if(mSearchAction != null)
+                        mSearchAction.setVisible(false);
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
-                            ObjectAnimator.ofFloat(mLogoHero, "alpha", 1f).setDuration(200),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "alpha", 0f).setDuration(200)
+                            ObjectAnimator.ofFloat(mLogoHero, "alpha", 1f).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "alpha", 0f).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1.5f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1.5f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 150 ).setDuration(400),
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", -60 ).setDuration(400)
+
                     );
                     set.start();
                 }

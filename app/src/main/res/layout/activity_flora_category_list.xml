@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="230dp"
@@ -51,30 +50,33 @@
                     android:src="@drawable/ic_logo"/>
             </RelativeLayout>
 
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/Theme.AppCompat.Light"
-                app:layout_collapseMode="pin" />
-
+                app:layout_collapseMode="pin" >
+            </androidx.appcompat.widget.Toolbar>
 
             <ImageView
-                android:layout_width="match_parent"
-                android:paddingRight="100dp"
-                android:paddingLeft="20dp"
-                android:layout_height="80dp"
+                android:layout_width="180dp"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingLeft="10dp"
                 android:visibility="gone"
                 android:id="@+id/iv_logo_toolbar"
                 android:layout_gravity="bottom"
                 android:src="@drawable/ic_logo"/>
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_view"
+        android:elevation="1000dp"
+        android:forceHasOverlappingRendering="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
