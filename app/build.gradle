@@ -55,6 +55,4 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation "com.google.android.material:material:1.0.0"
-
-    implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
 }

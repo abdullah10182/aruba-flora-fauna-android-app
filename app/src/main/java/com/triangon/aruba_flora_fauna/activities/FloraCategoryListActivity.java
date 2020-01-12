@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
@@ -47,11 +46,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private ImageView mLogoToolbar;
     private RelativeLayout mLogoHero;
 
-
-    private List<String> lastSearches;
-    private MaterialSearchBar searchBar;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,19 +63,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         getFloraCategoriesApi();
 
         initAppBar();
-
-
-        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-        searchBar.setHint("Custom hint");
-        searchBar.setSpeechMode(true);
-        //enable searchbar callbacks
-
-        //restore last queries from disk
-
-
-        //Inflate menu and setup OnMenuItemClickListener
-        searchBar.inflateMenu(R.menu.toolbar_main_menu);
-
 
     }
 
