@@ -23,12 +23,9 @@ public class FloraSpeciesListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flora_species_list);
 
-        test = findViewById(R.id.test);
-
         mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
         String categoryId = getIntent().getExtras().getString("categoryId");
         getFloraSpeciesApi(categoryId);
-
         subscribeObservers();
     }
 

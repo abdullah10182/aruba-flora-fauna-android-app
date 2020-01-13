@@ -22,11 +22,11 @@ import static com.triangon.aruba_flora_fauna.utils.Constants.NETWORK_TIMEOUT;
 public class FloraSpeciesApiClient {
 
     private static final String TAG = "SpeciesApiClientApi";
-
     private static FloraSpeciesApiClient instance;
-
     private MutableLiveData<List<FloraSpecies>> mFloraSpecies;
+    private MutableLiveData<List<FloraSpecies>> mFloraSpeciesSuggestions;
     private RetrieveFloraSpeciesRunnable mRetrieveFloraSpeciesRunnable;
+    private RetrieveFloraSpeciesSuggestionsRunnable mRetrieveFloraSpeciesSuggestionsRunnable;
 
     public static FloraSpeciesApiClient getInstance() {
         if(instance == null) {
@@ -38,10 +38,15 @@ public class FloraSpeciesApiClient {
 
     private FloraSpeciesApiClient() {
         mFloraSpecies = new MutableLiveData<>();
+        mFloraSpeciesSuggestions = new MutableLiveData<>();
     }
 
     public LiveData<List<FloraSpecies>> getFloraSpecies() {
         return mFloraSpecies;
+    }
+
+    public LiveData<List<FloraSpecies>> getFloraSpeciesSuggestions() {
+        return mFloraSpeciesSuggestions;
     }
 
     public void getFloraSpeciesApi(String category) {
@@ -51,6 +56,23 @@ public class FloraSpeciesApiClient {
         mFloraSpecies.setValue(null);
         mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
+
+        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                //let user know call timed out
+                handler.cancel(true);
+            }
+        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
+    }
+
+    public void getFloraSpeciesSuggestionsApi() {
+        if(mRetrieveFloraSpeciesSuggestionsRunnable != null) {
+            mRetrieveFloraSpeciesSuggestionsRunnable = null;
+        }
+
+        mRetrieveFloraSpeciesSuggestionsRunnable = new RetrieveFloraSpeciesSuggestionsRunnable();
+        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesSuggestionsRunnable);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
@@ -99,4 +121,42 @@ public class FloraSpeciesApiClient {
             Log.d(TAG, "cancelRequest: canceling search request");
         }
     }
+
+    public class RetrieveFloraSpeciesSuggestionsRunnable implements Runnable {
+
+        boolean cancelRequest;
+
+        public RetrieveFloraSpeciesSuggestionsRunnable() {
+            cancelRequest = false;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Response response = getFloraSpeciesSuggestions().execute();
+                if(cancelRequest) {
+                    return;
+                }
+                if(response.code() == 200) {
+                    List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
+                    mFloraSpecies.postValue(list);
+                } else {
+                    String error = response.errorBody().string();
+                    Log.e(TAG, "run: " + error);
+                    mFloraSpecies.postValue(null);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions() {
+            return ServiceGenerator.getFloraSpeciesApi().getFloraSpeciesSuggestions();
+        }
+
+        private void cancelRequest() {
+            Log.d(TAG, "cancelRequest: canceling search request");
+        }
+    }
+
 }

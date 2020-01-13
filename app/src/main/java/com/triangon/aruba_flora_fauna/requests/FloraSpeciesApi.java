@@ -13,4 +13,7 @@ public interface FloraSpeciesApi {
             @Query("category")
             String category
     );
+
+    @GET("aff-api/flora-species-search-suggestions")
+    Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions();
 }

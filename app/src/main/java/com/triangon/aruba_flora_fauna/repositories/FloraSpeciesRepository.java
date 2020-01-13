@@ -11,6 +11,7 @@ public class FloraSpeciesRepository {
 
     private static FloraSpeciesRepository instance;
     private FloraSpeciesApiClient mFloraSpeciesApiClient;
+    private FloraSpeciesApiClient mFloraSpeciesSuggestionsApiClient;
 
     public static FloraSpeciesRepository getInstance() {
         if (instance == null) {
@@ -21,6 +22,7 @@ public class FloraSpeciesRepository {
 
     private FloraSpeciesRepository() {
         mFloraSpeciesApiClient = FloraSpeciesApiClient.getInstance();
+        mFloraSpeciesSuggestionsApiClient = FloraSpeciesApiClient.getInstance();
     }
 
 
@@ -28,8 +30,16 @@ public class FloraSpeciesRepository {
         return mFloraSpeciesApiClient.getFloraSpecies();
     }
 
+    public LiveData<List<FloraSpecies>> getFloraSpeciesSuggestions() {
+        return mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestions();
+    }
+
     public void getFloraSpeciesApi(String category) {
         mFloraSpeciesApiClient.getFloraSpeciesApi(category);
+    }
+
+    public void getFloraSpeciesSuggestionsApi() {
+        mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi();
     }
 
 

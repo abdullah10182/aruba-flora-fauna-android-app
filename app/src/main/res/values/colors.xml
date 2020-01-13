@@ -6,4 +6,6 @@
     <color name="black">#CC000000</color>
     <color name="black_transparent">#0D000000</color>
     <color name="green_extra_light">#dbf0e8</color>
+    <color name="light_grey">#a5a5a5</color>
+    <color name="extra_light_grey">#f5f5f5</color>
 </resources>

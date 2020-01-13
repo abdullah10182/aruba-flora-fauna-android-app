@@ -11,16 +11,26 @@ import androidx.lifecycle.ViewModel;
 public class FloraSpeciesListViewModel extends ViewModel {
 
     private FloraSpeciesRepository mFloraSpeciesRepository;
+    private FloraSpeciesRepository mFloraSpeciesSuggestionsRepository;
 
     public FloraSpeciesListViewModel(){
         mFloraSpeciesRepository = FloraSpeciesRepository.getInstance();
+        mFloraSpeciesSuggestionsRepository = FloraSpeciesRepository.getInstance();
     }
 
     public LiveData<List<FloraSpecies>> getFloraSpecies() {
         return mFloraSpeciesRepository.getFloraSpecies();
     }
 
+    public LiveData<List<FloraSpecies>> getFloraSpeciesSuggestions() {
+        return mFloraSpeciesRepository.getFloraSpeciesSuggestions();
+    }
+
     public void getFloraSpeciesApi(String category) {
         mFloraSpeciesRepository.getFloraSpeciesApi(category);
+    }
+
+    public void getFloraSpeciesSuggestionsApi() {
+        mFloraSpeciesRepository.getFloraSpeciesSuggestionsApi();
     }
 }

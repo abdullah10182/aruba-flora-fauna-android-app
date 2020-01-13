@@ -7,6 +7,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -14,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,28 +38,34 @@ import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
+import com.triangon.aruba_flora_fauna.requests.FloraSpeciesApi;
+import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
+import com.triangon.aruba_flora_fauna.requests.responses.FloraSpeciesListResponse;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
 
-    private static final String TAG = "FloraCategoryListActivity";
+    private static final String TAG = "CategoryListActivity";
 
     private FloraCategoryListViewModel mFloraCategoryListViewModel;
     private RecyclerView mRecyclerView;
     private FloraCategoryRecyclerAdapter mAdapter;
     private ImageView mLogoToolbar;
     private RelativeLayout mLogoHero;
-    private MenuItem mSearchAction;
+    public MenuItem mSearchAction;
     private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_flora_category_list);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -67,6 +79,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         initAppBar();
 
     }
+
 
     private void getFloraCategoriesApi() {
         mFloraCategoryListViewModel.getFloraCategoriesApi();
@@ -118,12 +131,11 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(mLogoToolbar.getVisibility() == View.GONE)
-                    mLogoToolbar.setVisibility(View.VISIBLE);
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                    //if collapses
+                    if(mLogoToolbar.getVisibility() == View.GONE)
+                        mLogoToolbar.setVisibility(View.VISIBLE);
                     AnimatorSet set = new AnimatorSet();
-                    if(mSearchAction != null)
-                        mSearchAction.setVisible(true);
                     set.playTogether(
                             ObjectAnimator.ofFloat(mLogoHero, "alpha", 0f).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "alpha", 1f).setDuration(400),
@@ -135,8 +147,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                     set.start();
                 } else if (verticalOffset == 0) {
                     // If expanded, then do this
-                    if(mSearchAction != null)
-                        mSearchAction.setVisible(false);
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
                             ObjectAnimator.ofFloat(mLogoHero, "alpha", 1f).setDuration(400),
@@ -152,6 +162,5 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
             }
         });
     }
-
 
 }
