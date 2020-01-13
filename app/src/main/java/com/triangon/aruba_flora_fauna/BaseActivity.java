@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
     @Nullable
     private ProgressBar mSearchProgressBar;
+    private boolean mSearchInitiated = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,9 +70,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         mSearchProgressBar = findViewById(R.id.pb_search_loader);
 
-        String[] myStringArray;
-        myStringArray = new String[]{""}; //set empty array otherwise overlay does not work
-        mSearchView.setSuggestions(myStringArray);
+        String[] tempStringArray;
+        tempStringArray = new String[]{""}; //set empty array otherwise overlay does not work
+        mSearchView.setSuggestions(tempStringArray);
 
         mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
@@ -81,8 +82,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(mSuggestions == null && newText.length() > 0)
+                if(mSuggestions == null && newText.length() > 0 && mSearchInitiated == false) {
                     getFloraSpeciesSuggestionsApi();
+                }
                 return true;
             }
         });
@@ -104,6 +106,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void getFloraSpeciesSuggestionsApi() {
+        mSearchInitiated = true;
         mSearchProgressBar.setVisibility(View.VISIBLE);
         mFloraSpeciesListViewModel.getFloraSpeciesSuggestionsApi();
     }
@@ -117,14 +120,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                     ArrayList<String> suggestionsArrList = new ArrayList<String>();
                     for(FloraSpecies species : floraSpecies) {
                         suggestionsArrList.add(species.getCommonName());
-                        if(species.getPapiamentoName() != null && species.getPapiamentoName().trim() != species.getCommonName().trim())
-                            suggestionsArrList.add(species.getPapiamentoName());
+                        if(species.getPapiamentoName() != null && !species.getPapiamentoName().trim().equals(species.getCommonName().trim()))
+                            suggestionsArrList.add(species.getPapiamentoName() + " (" + species.getCommonName() + ")");
                     }
 
                     mSuggestions = suggestionsArrList.toArray(new String[suggestionsArrList.size()]);
 
                     if(mSuggestions.length > 0 && mSearchView != null)
                         mSearchView.setSuggestions(mSuggestions);
+
                     mSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -139,9 +143,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private String getSelectedId(List<FloraSpecies> floraSpecies, String query) {
         String selectedId = "";
-
+        String[] splitQuery = query.split("[\\(\\)]");
+        String nameBetweenParentheses = null;
+        if(splitQuery.length > 1){
+            nameBetweenParentheses = splitQuery[1];
+        }
+        String nameClean = nameBetweenParentheses != null ? nameBetweenParentheses : query;
         for(FloraSpecies species : floraSpecies) {
-            if(species.getCommonName() == query || species.getPapiamentoName() == query){
+            if(species.getCommonName().equals(nameClean)){
                 selectedId = species.getId();
                 String query1 = selectedId + species.getCommonName();
                 Toast.makeText(getApplicationContext(), query1, Toast.LENGTH_SHORT).show();

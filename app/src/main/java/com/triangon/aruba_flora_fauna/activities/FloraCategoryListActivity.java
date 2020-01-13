@@ -96,7 +96,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
             @Override
             public void onChanged(List<FloraCategory> floraCategories) {
                 if(floraCategories != null) {
-                    System.out.println(floraCategories.get(0).getName());
                     mAdapter.setFloraCategories(floraCategories);
                     showProgressBar(false);
                 }
