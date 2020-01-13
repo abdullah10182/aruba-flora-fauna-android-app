@@ -11,6 +11,7 @@
     android:fitsSystemWindows="true"
     android:background="@color/green_extra_light">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:id="@+id/app_bar_layout"
@@ -19,7 +20,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="280dp"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="bottom|center_horizontal"
             app:expandedTitleMarginBottom="30dp"
@@ -29,9 +30,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:id="@+id/iv_hero_image_home"
-                android:src="@drawable/testimage"
+                android:src="@drawable/home_hero_bg"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier=".7" />
 
@@ -50,6 +51,16 @@
                     android:src="@drawable/ic_logo"/>
             </RelativeLayout>
 
+            <ImageView
+                android:id="@+id/iv_search_circle_bg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                app:layout_collapseMode="pin"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="9dp"
+                android:src="@drawable/ic_search_circle"/>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -63,6 +74,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:paddingLeft="10dp"
                 android:visibility="gone"
+                app:layout_collapseMode="pin"
                 android:id="@+id/iv_logo_toolbar"
                 android:layout_gravity="bottom"
                 android:src="@drawable/ic_logo"/>
@@ -119,6 +131,8 @@
         android:layout_marginEnd="50dp"
         android:layout_marginTop="13dp"
         android:visibility="gone"/>
+
+
 
 
 

@@ -151,4 +151,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         return selectedId;
     }
+
+    public void openSearch() {
+        mSearchView.showSearch();
+    }
 }

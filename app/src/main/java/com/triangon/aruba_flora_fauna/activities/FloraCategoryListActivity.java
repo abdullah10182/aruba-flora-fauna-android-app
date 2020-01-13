@@ -1,5 +1,6 @@
 package com.triangon.aruba_flora_fauna.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
@@ -56,14 +57,17 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private FloraCategoryRecyclerAdapter mAdapter;
     private ImageView mLogoToolbar;
     private RelativeLayout mLogoHero;
-    public MenuItem mSearchAction;
+    @Nullable
     private Toolbar mToolbar;
+    @BindView(R.id.iv_search_circle_bg)
+    public ImageView mSearchIconCircleBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_flora_category_list);
+
+        ButterKnife.bind(this);
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -78,8 +82,9 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
         initAppBar();
 
-    }
+        initSearchButton();
 
+    }
 
     private void getFloraCategoriesApi() {
         mFloraCategoryListViewModel.getFloraCategoriesApi();
@@ -135,6 +140,9 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                     //if collapses
                     if(mLogoToolbar.getVisibility() == View.GONE)
                         mLogoToolbar.setVisibility(View.VISIBLE);
+
+                    mToolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
+
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
                             ObjectAnimator.ofFloat(mLogoHero, "alpha", 0f).setDuration(400),
@@ -142,11 +150,16 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 0 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", 0 ).setDuration(400)
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", 0 ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 0.6f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 0.6f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 0f ).setDuration(400)
                     );
                     set.start();
                 } else if (verticalOffset == 0) {
                     // If expanded, then do this
+                    if(mToolbar.findViewById(R.id.action_search) != null)
+                        mToolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
                             ObjectAnimator.ofFloat(mLogoHero, "alpha", 1f).setDuration(400),
@@ -154,11 +167,26 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1.5f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1.5f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 150 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", -60 ).setDuration(400)
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", -60 ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 1f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 1f ).setDuration(400),
+                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 1f ).setDuration(400)
+
 
                     );
                     set.start();
                 }
+            }
+        });
+    }
+
+    public void initSearchButton() {
+        mSearchIconCircleBg.bringToFront();
+        mSearchIconCircleBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("test");
+                openSearch();
             }
         });
     }

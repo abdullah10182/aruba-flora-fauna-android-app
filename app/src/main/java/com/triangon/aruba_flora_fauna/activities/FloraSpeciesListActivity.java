@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProviders;
 public class FloraSpeciesListActivity extends BaseActivity {
 
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
-    private TextView test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class FloraSpeciesListActivity extends BaseActivity {
 
     private void getFloraSpeciesApi(String categoryId) {
         showProgressBar(true);
-        test.setText("");
         mFloraSpeciesListViewModel.getFloraSpeciesApi(categoryId);
     }
 
@@ -41,17 +39,6 @@ public class FloraSpeciesListActivity extends BaseActivity {
             public void onChanged(List<FloraSpecies> floraSpecies) {
                 if(floraSpecies != null) {
                     showProgressBar(false);
-                    for (FloraSpecies species : floraSpecies) {
-                        if(species.getPapiamentoName() == null){
-                            test.append("no pap name");
-                        }else {
-                            test.append(species.getPapiamentoName());
-                        }
-                        test.append("\n");
-                    }
-                    if(floraSpecies.size() == 0){
-                        test.setText("No Species in category");
-                    }
                 }
             }
         });
