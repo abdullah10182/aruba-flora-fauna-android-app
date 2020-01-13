@@ -3,6 +3,7 @@ package com.triangon.aruba_flora_fauna.activities;
 import com.triangon.aruba_flora_fauna.R;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
@@ -64,6 +65,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
 
     @Override
     public void onFloraSpeciesClick(int position) {
-
+        String text = mAdapter.getFloraSpecies().get(position).getCommonName();
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 }
