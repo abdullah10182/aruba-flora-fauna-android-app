@@ -35,13 +35,12 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background);
 
-
-        ((FloraCategoryViewHolder)holder).title.setText(mFloraCategories.get(position).getName());
+        ((FloraCategoryViewHolder)holder).mTitle.setText(mFloraCategories.get(position).getName());
 
         Glide.with(holder.itemView.getContext())
                 .setDefaultRequestOptions(requestOptions)
                 .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
-                .into(((FloraCategoryViewHolder)holder).image);
+                .into(((FloraCategoryViewHolder)holder).mImage);
 
     }
 

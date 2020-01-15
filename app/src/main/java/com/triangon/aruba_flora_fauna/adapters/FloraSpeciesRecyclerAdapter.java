@@ -36,12 +36,36 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 .placeholder(R.drawable.ic_launcher_background);
 
 
-        ((FloraSpeciesViewHolder)holder).title.setText(mFloraSpecies.get(position).getCommonName());
+        ((FloraSpeciesViewHolder)holder).mTitle.setText(mFloraSpecies.get(position).getCommonName());
+        ((FloraSpeciesViewHolder)holder).mSubTitle.setText(mFloraSpecies.get(position).getPapiamentoName());
+        ((FloraSpeciesViewHolder)holder).mCategory.setText("Category: " + mFloraSpecies.get(position).getCategoryName());
+        ((FloraSpeciesViewHolder)holder).mFamily.setText("Family: " + mFloraSpecies.get(position).getFamily());
 
         Glide.with(holder.itemView.getContext())
                 .setDefaultRequestOptions(requestOptions)
                 .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
-                .into(((FloraSpeciesViewHolder)holder).image);
+                .into(((FloraSpeciesViewHolder)holder).mImage);
+
+        //protected
+        if(mFloraSpecies.get(position).isProtectedLocally()){
+            ((FloraSpeciesViewHolder)holder).mProtectedWrapper.setVisibility(View.VISIBLE);
+        } else {
+            ((FloraSpeciesViewHolder)holder).mProtectedWrapper.setVisibility(View.GONE);
+        }
+
+        //invasive
+        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("11")){
+            ((FloraSpeciesViewHolder)holder).mInvasiveWrapper.setVisibility(View.VISIBLE);
+        } else {
+            ((FloraSpeciesViewHolder)holder).mInvasiveWrapper.setVisibility(View.GONE);
+        }
+
+        //endemic
+        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("12")){
+            ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.VISIBLE);
+        } else {
+            ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.GONE);
+        }
 
     }
 
@@ -54,7 +78,7 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return 0;
     }
 
-    public void setmFloraSpecies(List<FloraSpecies> floraSpecies) {
+    public void setFloraSpecies(List<FloraSpecies> floraSpecies) {
         mFloraSpecies = floraSpecies;
         notifyDataSetChanged();
     }

@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.FloraCategoryListActivity"
-    android:adjustViewBounds="true"
     android:layout_gravity="center"
-    android:fitsSystemWindows="true"
     android:background="@color/green_extra_light">
+
+    <!-- Search widget-->
+    <include layout="@layout/material_search_widget"/>
+    <!--/-->
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -115,26 +117,5 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.miguelcatalan.materialsearchview.MaterialSearchView
-        android:id="@+id/search_view"
-        android:elevation="101dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <ProgressBar
-        android:elevation="101dp"
-        android:layout_gravity="end"
-        android:id="@+id/pb_search_loader"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:theme="@style/ProgressBarStyle"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="13dp"
-        android:visibility="gone"/>
-
-
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

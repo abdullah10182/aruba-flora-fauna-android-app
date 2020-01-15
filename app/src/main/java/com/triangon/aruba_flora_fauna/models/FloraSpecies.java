@@ -29,6 +29,12 @@ public class FloraSpecies implements Parcelable {
     @SerializedName("category_name")
     private String categoryName;
 
+    @SerializedName("status_id")
+    private String statusId;
+
+    @SerializedName("status_name")
+    private String statusName;
+
     private String family;
 
     @SerializedName("short_description")
@@ -45,7 +51,7 @@ public class FloraSpecies implements Parcelable {
     @SerializedName("additional_images")
     private List<ImageBundle> additionalImages;
 
-    public FloraSpecies(String id, String commonName, String papiamentoName, String scientificName, boolean protectedLocally, String categoryId, String categoryName, String family, String shortDescription, String description, String moreInfoLink, ImageBundle mainImage, List<ImageBundle> additionalImages) {
+    public FloraSpecies(String id, String commonName, String papiamentoName, String scientificName, boolean protectedLocally, String categoryId, String categoryName, String statusId, String statusName, String family, String shortDescription, String description, String moreInfoLink, ImageBundle mainImage, List<ImageBundle> additionalImages) {
         this.id = id;
         this.commonName = commonName;
         this.papiamentoName = papiamentoName;
@@ -53,6 +59,8 @@ public class FloraSpecies implements Parcelable {
         this.protectedLocally = protectedLocally;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.statusId = statusId;
+        this.statusName = statusName;
         this.family = family;
         this.shortDescription = shortDescription;
         this.description = description;
@@ -72,6 +80,8 @@ public class FloraSpecies implements Parcelable {
         protectedLocally = in.readByte() != 0;
         categoryId = in.readString();
         categoryName = in.readString();
+        statusId = in.readString();
+        statusName = in.readString();
         family = in.readString();
         shortDescription = in.readString();
         description = in.readString();
@@ -196,6 +206,22 @@ public class FloraSpecies implements Parcelable {
         this.additionalImages = additionalImages;
     }
 
+    public String getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
     @Override
     public String toString() {
         return "FloraSpecies{" +
@@ -206,6 +232,8 @@ public class FloraSpecies implements Parcelable {
                 ", protectedLocally=" + protectedLocally +
                 ", categoryId='" + categoryId + '\'' +
                 ", categoryName='" + categoryName + '\'' +
+                ", statusId='" + statusId + '\'' +
+                ", statusName='" + statusName + '\'' +
                 ", family='" + family + '\'' +
                 ", shortDescription='" + shortDescription + '\'' +
                 ", description='" + description + '\'' +
@@ -229,6 +257,8 @@ public class FloraSpecies implements Parcelable {
         parcel.writeByte((byte) (protectedLocally ? 1 : 0));
         parcel.writeString(categoryId);
         parcel.writeString(categoryName);
+        parcel.writeString(statusId);
+        parcel.writeString(statusName);
         parcel.writeString(family);
         parcel.writeString(shortDescription);
         parcel.writeString(description);

@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FloraCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    TextView title;
-    ImageView image;
+    TextView mTitle;
+    ImageView mImage;
     OnFloraCategoryListener onFloraCategoryListener;
 
     public FloraCategoryViewHolder(@NonNull View itemView, OnFloraCategoryListener onFloraCategoryListener) {
         super(itemView);
         this.onFloraCategoryListener = onFloraCategoryListener;
-        title = itemView.findViewById(R.id.category_title);
-        image = itemView.findViewById(R.id.category_image);
+        mTitle = itemView.findViewById(R.id.tv_category_title);
+        mImage = itemView.findViewById(R.id.iv_category_image);
 
         itemView.setOnClickListener(this);
     }

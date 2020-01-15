@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Aruba Flora</string>
+    <string name="protected_badge_text">Protected</string>
+    <string name="endemic_badge_text">Endemic</string>
+    <string name="invasive_badge_text">Invasive</string>
 </resources>

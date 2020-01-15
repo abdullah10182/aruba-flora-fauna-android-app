@@ -53,7 +53,7 @@ public class FloraSpeciesApiClient {
         if(mRetrieveFloraSpeciesRunnable != null) {
             mRetrieveFloraSpeciesRunnable = null;
         }
-        mFloraSpecies.setValue(null);
+
         mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
 
@@ -101,6 +101,7 @@ public class FloraSpeciesApiClient {
                     return;
                 }
                 if(response.code() == 200) {
+                    System.out.println("------------");
                     List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
                     mFloraSpecies.postValue(list);
                 } else {
@@ -138,12 +139,13 @@ public class FloraSpeciesApiClient {
                     return;
                 }
                 if(response.code() == 200) {
+                    System.out.println("------------>>>>>");
                     List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
-                    mFloraSpecies.postValue(list);
+                    mFloraSpeciesSuggestions.postValue(list);
                 } else {
                     String error = response.errorBody().string();
                     Log.e(TAG, "run: " + error);
-                    mFloraSpecies.postValue(null);
+                    mFloraSpeciesSuggestions.postValue(null);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

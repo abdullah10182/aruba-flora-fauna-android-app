@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="flora_category_thumbnail_width">250dp</dimen>
-    <dimen name="flora_category_thumbnail_height">250dp</dimen>
+    <dimen name="flora_category_thumbnail_width">300dp</dimen>
+    <dimen name="flora_category_thumbnail_height">300dp</dimen>
     <dimen name="flora_category_title_text_size">20sp</dimen>
+    <dimen name="flora_species_thumbnail_width">140dp</dimen>
+    <dimen name="flora_species_thumbnail_height">140dp</dimen>
+    <dimen name="flora_species_list_title_text_size">20sp</dimen>
+    <dimen name="flora_species_list_sub_title_text_size">16sp</dimen>
+    <dimen name="flora_species_list_small_text_size">12sp</dimen>
 </resources>

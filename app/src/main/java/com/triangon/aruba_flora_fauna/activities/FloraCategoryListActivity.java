@@ -53,12 +53,15 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private static final String TAG = "CategoryListActivity";
 
     private FloraCategoryListViewModel mFloraCategoryListViewModel;
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.rv_flora_category_list)
+    public RecyclerView mRecyclerView;
     private FloraCategoryRecyclerAdapter mAdapter;
-    private ImageView mLogoToolbar;
-    private RelativeLayout mLogoHero;
-    @Nullable
-    private Toolbar mToolbar;
+    @BindView(R.id.iv_logo_toolbar)
+    public ImageView mLogoToolbar;
+    @BindView(R.id.iv_logo_hero)
+    public RelativeLayout mLogoHero;
+    @BindView(R.id.toolbar)
+    public Toolbar mToolbar;
     @BindView(R.id.iv_search_circle_bg)
     public ImageView mSearchIconCircleBg;
 
@@ -69,11 +72,9 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
         ButterKnife.bind(this);
 
-        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mRecyclerView = findViewById(R.id.rv_flora_category_list);
         mFloraCategoryListViewModel = ViewModelProviders.of(this).get(FloraCategoryListViewModel.class);
 
         initRecyclerView();
@@ -119,14 +120,14 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
         Intent intent = new Intent(this, FloraSpeciesListActivity.class);
         String categoryId = mAdapter.getFloraCategories().get(position).getId();
+        String categoryName = mAdapter.getFloraCategories().get(position).getName();
         intent.putExtra("categoryId", categoryId);
+        intent.putExtra("categoryName", categoryName);
         startActivity(intent);
     }
 
     public void initAppBar() {
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
-        mLogoToolbar = findViewById(R.id.iv_logo_toolbar);
-        mLogoHero = findViewById(R.id.iv_logo_hero);
         appBarListener(appBarLayout);
     }
 

@@ -14,6 +14,7 @@ public class FloraCategoryListViewModel extends ViewModel {
 
     public FloraCategoryListViewModel() {
         mFloraCategoryRepository = FloraCategoryRepository.getInstance();
+        mFloraCategoryRepository.getFloraCategoriesApi();
     }
 
     public LiveData<List<FloraCategory>> getFloraCategories() {

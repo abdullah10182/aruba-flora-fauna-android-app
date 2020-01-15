@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,59 +9,179 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="6dp"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#f5f5f5"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardBackgroundColor="@color/extra_light_grey"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                card_view:cardBackgroundColor="@android:color/transparent">
+                android:orientation="horizontal">
 
-
-
-                <ImageView
-                    android:id="@+id/category_image"
-                    android:layout_width="150dp"
-                    android:layout_height="0dp"
-                    android:padding="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
-                <TextView
-                    android:id="@+id/category_title"
+                <androidx.cardview.widget.CardView
+                    app:cardCornerRadius="6dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="Long text TExt"
-                    android:textSize="@dimen/flora_category_title_text_size"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/category_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_species_list_image"
+                        android:layout_width="@dimen/flora_species_thumbnail_width"
+                        android:layout_height="@dimen/flora_species_thumbnail_height"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_launcher_background"
+                        app:layout_constraintDimensionRatio="1:1" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:id="@+id/tv_species_list_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:text="Long text test"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/flora_species_list_title_text_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_species_list_sub_title"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:text="Long text test"
+                        android:textSize="@dimen/flora_species_list_sub_title_text_size" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/lightest_light_grey"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_species_list_category"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:text="Category: "
+                        android:textSize="@dimen/flora_species_list_small_text_size" />
+
+                    <TextView
+                        android:id="@+id/tv_species_list_falmily"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:text="Family: "
+                        android:textSize="@dimen/flora_species_list_small_text_size" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end|bottom"
+                        android:orientation="horizontal">
+
+                        <!--Endemic badge-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_endemic_wrapper"
+                            android:layout_marginLeft="8dp">
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:scaleType="fitXY"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_aruba_badge" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="8sp"
+                                android:textStyle="bold"
+                                android:textAllCaps="true"
+                                android:text="@string/endemic_badge_text"/>
+                        </LinearLayout>
+                        <!--/-->
+
+                        <!--Protected badge-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_protected_wrapper"
+                            android:layout_marginLeft="8dp">
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:scaleType="fitXY"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_protected_badge" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="8sp"
+                                android:textStyle="bold"
+                                android:textAllCaps="true"
+                                android:text="@string/protected_badge_text"/>
+                        </LinearLayout>
+                        <!--/-->
+
+                        <!--Protected badge-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_invasive_wrapper"
+                            android:layout_marginLeft="8dp">
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:scaleType="fitXY"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_invasive_badge" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="8sp"
+                                android:textStyle="bold"
+                                android:textAllCaps="true"
+                                android:text="@string/protected_badge_text"/>
+                        </LinearLayout>
+                        <!--/-->
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
     </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

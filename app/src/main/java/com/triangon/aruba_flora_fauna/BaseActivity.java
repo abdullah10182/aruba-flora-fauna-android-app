@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
+import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ProgressBar mProgressBar;
     public MaterialSearchView mSearchView;
     private String[] mSuggestions;
-    private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
+    private FloraSpeciesSuggestionsViewModel mFloraSpeciesSuggestionsViewModel;
     @Nullable
     private ProgressBar mSearchProgressBar;
     private boolean mSearchInitiated = false;
@@ -41,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
+        mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
         subscribeObservers();
     }
 
@@ -108,11 +109,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void getFloraSpeciesSuggestionsApi() {
         mSearchInitiated = true;
         mSearchProgressBar.setVisibility(View.VISIBLE);
-        mFloraSpeciesListViewModel.getFloraSpeciesSuggestionsApi();
+        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestionsApi();
     }
 
     private void subscribeObservers() {
-        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
+        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestions().observe(this, new Observer<List<FloraSpecies>>() {
             @Override
             public void onChanged(List<FloraSpecies> floraSpecies) {
                 if(floraSpecies != null && mSearchProgressBar != null) {
