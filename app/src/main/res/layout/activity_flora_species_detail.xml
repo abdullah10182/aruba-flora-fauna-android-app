@@ -68,13 +68,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lightest_light_grey"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

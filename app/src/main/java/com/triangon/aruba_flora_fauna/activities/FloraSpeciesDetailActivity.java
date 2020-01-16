@@ -70,25 +70,21 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
                 showAdditionalImages(currentPosition);
         }
 
-        mHeroImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAdditionalImages(0);
-
-            }
-        });
-
         initRecyclerView();
 
     }
 
     private void showAdditionalImages(int currentPosition) {
+        ImageView smallImage = null;
+        RequestOptions requestOptions = new RequestOptions();
 
-        View row = mRecyclerView.getLayoutManager().findViewByPosition(currentPosition);
-        ImageView smallImage = row.findViewById(R.id.iv_additional_image);
-
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(smallImage.getDrawable());
+        if(mRecyclerView.getLayoutManager() != null) {
+            View row = mRecyclerView.getLayoutManager().findViewByPosition(currentPosition);
+            smallImage = row.findViewById(R.id.iv_additional_image);
+            requestOptions.placeholder(smallImage.getDrawable());
+        } else {
+            requestOptions.placeholder(R.drawable.ic_launcher_background);
+        }
 
         mImageViewer = new StfalconImageViewer.Builder<ImageBundle>(FloraSpeciesDetailActivity.this, mSelectedSpecies.getAdditionalImages(), new ImageLoader<ImageBundle>() {
             @Override
