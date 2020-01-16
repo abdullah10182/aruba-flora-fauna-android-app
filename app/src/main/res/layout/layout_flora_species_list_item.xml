@@ -70,8 +70,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/lightest_light_grey"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp"/>
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"/>
 
                     <TextView
                         android:id="@+id/tv_species_list_category"
@@ -80,7 +80,7 @@
                         android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="4dp"
                         android:text="Category: "
                         android:textSize="@dimen/flora_species_list_small_text_size" />
 
@@ -91,7 +91,7 @@
                         android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="4dp"
                         android:text="Family: "
                         android:textSize="@dimen/flora_species_list_small_text_size" />
 
@@ -107,7 +107,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:id="@+id/ll_endemic_wrapper"
-                            android:layout_marginLeft="8dp">
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp">
                             <ImageView
                                 android:layout_width="26dp"
                                 android:layout_height="26dp"
@@ -131,7 +132,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:id="@+id/ll_protected_wrapper"
-                            android:layout_marginLeft="8dp">
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp">
                             <ImageView
                                 android:layout_width="26dp"
                                 android:layout_height="26dp"
@@ -149,13 +151,14 @@
                         </LinearLayout>
                         <!--/-->
 
-                        <!--Protected badge-->
+                        <!--Invasive badge-->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:id="@+id/ll_invasive_wrapper"
-                            android:layout_marginLeft="8dp">
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp">
                             <ImageView
                                 android:layout_width="26dp"
                                 android:layout_height="26dp"
@@ -169,7 +172,7 @@
                                 android:textSize="8sp"
                                 android:textStyle="bold"
                                 android:textAllCaps="true"
-                                android:text="@string/protected_badge_text"/>
+                                android:text="@string/invasive_badge_text"/>
                         </LinearLayout>
                         <!--/-->
 

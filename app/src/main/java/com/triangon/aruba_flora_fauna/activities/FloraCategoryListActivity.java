@@ -17,19 +17,11 @@ import retrofit2.Response;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.triangon.aruba_flora_fauna.BaseActivity;
@@ -38,14 +30,8 @@ import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
-import com.triangon.aruba_flora_fauna.models.FloraSpecies;
-import com.triangon.aruba_flora_fauna.requests.FloraSpeciesApi;
-import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
-import com.triangon.aruba_flora_fauna.requests.responses.FloraSpeciesListResponse;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
@@ -115,9 +101,6 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
     @Override
     public void onFloraCategoryClick(int position) {
-        String text = mAdapter.getFloraCategories().get(position).getName();
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(this, FloraSpeciesListActivity.class);
         String categoryId = mAdapter.getFloraCategories().get(position).getId();
         String categoryName = mAdapter.getFloraCategories().get(position).getName();

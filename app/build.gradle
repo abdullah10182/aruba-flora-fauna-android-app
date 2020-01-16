@@ -63,4 +63,11 @@ dependencies {
     //butterknife
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+
+    //html display
+    implementation "org.sufficientlysecure:html-textview:3.9"
+
+    //stfalcon image viewer
+    implementation "com.github.stfalcon:stfalcon-imageviewer:0.1.0"
+
 }

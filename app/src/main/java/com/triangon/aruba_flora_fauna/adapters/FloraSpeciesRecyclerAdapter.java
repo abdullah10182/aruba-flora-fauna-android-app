@@ -61,7 +61,7 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         //endemic
-        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("12")){
+        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("13")){
             ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.VISIBLE);
         } else {
             ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.GONE);
