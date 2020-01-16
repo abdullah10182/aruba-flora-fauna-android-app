@@ -33,7 +33,7 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background);
+                .placeholder(R.drawable.aff_logo_grey);
 
         ((FloraCategoryViewHolder)holder).mTitle.setText(mFloraCategories.get(position).getName());
 

@@ -83,7 +83,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             smallImage = row.findViewById(R.id.iv_additional_image);
             requestOptions.placeholder(smallImage.getDrawable());
         } else {
-            requestOptions.placeholder(R.drawable.ic_launcher_background);
+            requestOptions.placeholder(R.drawable.aff_logo_grey);
         }
 
         mImageViewer = new StfalconImageViewer.Builder<ImageBundle>(FloraSpeciesDetailActivity.this, mSelectedSpecies.getAdditionalImages(), new ImageLoader<ImageBundle>() {
@@ -111,7 +111,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
           .withImageChangeListener(new OnImageChangeListener() {
               @Override
               public void onImageChange(int position) {
-                  requestOptions.placeholder(R.drawable.ic_launcher_background);
+                  requestOptions.placeholder(R.drawable.aff_logo_grey);
                   Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
               }
           })
@@ -126,7 +126,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
 
     private void setHeroImage() {
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background);
+                .placeholder(R.drawable.aff_logo_grey);
         Glide.with(this)
                 .setDefaultRequestOptions(requestOptions)
                 .load(mSelectedSpecies.getMainImage().getImageThumbnail())

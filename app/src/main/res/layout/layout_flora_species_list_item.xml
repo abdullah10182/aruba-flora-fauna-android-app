@@ -31,7 +31,7 @@
                         android:layout_width="@dimen/flora_species_thumbnail_width"
                         android:layout_height="@dimen/flora_species_thumbnail_height"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/aff_logo_grey"
                         app:layout_constraintDimensionRatio="1:1" />
                 </androidx.cardview.widget.CardView>
 

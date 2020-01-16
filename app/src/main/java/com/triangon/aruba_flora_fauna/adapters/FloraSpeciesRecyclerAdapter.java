@@ -33,7 +33,7 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background);
+                .placeholder(R.drawable.aff_logo_grey);
 
 
         ((FloraSpeciesViewHolder)holder).mTitle.setText(mFloraSpecies.get(position).getCommonName());

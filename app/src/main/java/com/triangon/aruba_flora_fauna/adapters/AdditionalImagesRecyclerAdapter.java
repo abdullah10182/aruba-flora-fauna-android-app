@@ -33,7 +33,7 @@ public class AdditionalImagesRecyclerAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background);
+                .placeholder(R.drawable.aff_logo_grey);
 
         //((AdditionalImagesViewHolder)holder).mTitle.setText(mAdditionalImages.get(position).getImageTitle());
 
