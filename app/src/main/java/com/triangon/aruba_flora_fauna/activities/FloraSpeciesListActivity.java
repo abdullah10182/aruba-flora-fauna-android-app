@@ -5,7 +5,6 @@ import com.triangon.aruba_flora_fauna.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
@@ -53,12 +52,8 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
     }
 
     private void getFloraSpeciesApi(String categoryId) {
-//        if(mFloraSpeciesListViewModel.getSelectedFloraCategory() != null && mFloraSpeciesListViewModel.getSelectedFloraCategory().equals(categoryId)) {
-//            mFloraSpeciesListViewModel.getFloraSpeciesApi(categoryId);
-//        }
-
         showProgressBar(true);
-        mFloraSpeciesListViewModel.getFloraSpeciesApi(categoryId);
+        mFloraSpeciesListViewModel.getFloraSpeciesApi(categoryId, null);
     }
 
     private void subscribeObservers() {

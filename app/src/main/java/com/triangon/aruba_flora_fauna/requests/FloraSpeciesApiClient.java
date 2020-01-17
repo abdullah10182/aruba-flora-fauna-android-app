@@ -49,12 +49,12 @@ public class FloraSpeciesApiClient {
         return mFloraSpeciesSuggestions;
     }
 
-    public void getFloraSpeciesApi(String category) {
+    public void getFloraSpeciesApi(String category, String speciesId) {
         if(mRetrieveFloraSpeciesRunnable != null) {
             mRetrieveFloraSpeciesRunnable = null;
         }
 
-        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category);
+        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
@@ -85,25 +85,27 @@ public class FloraSpeciesApiClient {
 
     public class RetrieveFloraSpeciesRunnable implements Runnable {
 
-        private String category;
+        private String mCategory;
+        private String mSpeciesId;
         boolean cancelRequest;
 
-        public RetrieveFloraSpeciesRunnable(String category) {
-            this.category = category;
+        public RetrieveFloraSpeciesRunnable(String category, String speciesId) {
+            mCategory = category;
+            mSpeciesId = speciesId;
             cancelRequest = false;
         }
 
         @Override
         public void run() {
             try {
-                Response response = getFloraSpecies(category).execute();
+                Response response = getFloraSpecies(mCategory, mSpeciesId).execute();
                 if(cancelRequest) {
                     return;
                 }
                 if(response.code() == 200) {
-                    System.out.println("------------");
                     List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
                     mFloraSpecies.postValue(list);
+                    System.out.println("------------" + list);
                 } else {
                     String error = response.errorBody().string();
                     Log.e(TAG, "run: " + error);
@@ -114,8 +116,8 @@ public class FloraSpeciesApiClient {
             }
         }
 
-        private Call<FloraSpeciesListResponse> getFloraSpecies(String category) {
-            return ServiceGenerator.getFloraSpeciesApi().getFloraSpecies(category);
+        private Call<FloraSpeciesListResponse> getFloraSpecies(String category, String speciesId) {
+            return ServiceGenerator.getFloraSpeciesApi().getFloraSpecies(category, speciesId);
         }
 
         private void cancelRequest() {
@@ -139,7 +141,6 @@ public class FloraSpeciesApiClient {
                     return;
                 }
                 if(response.code() == 200) {
-                    System.out.println("------------>>>>>");
                     List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
                     mFloraSpeciesSuggestions.postValue(list);
                 } else {

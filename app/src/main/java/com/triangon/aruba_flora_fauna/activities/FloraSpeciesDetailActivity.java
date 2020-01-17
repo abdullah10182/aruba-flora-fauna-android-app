@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +40,17 @@ import com.triangon.aruba_flora_fauna.adapters.AdditionalImagesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.OnAdditionalImageListener;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.models.ImageBundle;
+import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import java.util.List;
 
 public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnAdditionalImageListener {
 
     private FloraSpecies mSelectedSpecies;
+    private String mSelectedSpeciesId;
+    private String mSelectedSpeciesName;
     @BindView(R.id.iv_species_detail_hero_image)
     public ImageView mHeroImage;
     private boolean mImageViewerOpen = false;
@@ -79,7 +88,15 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     @BindView(R.id.iv_protected_badge)
     public ImageView mProtectedBadge;
 
+    @BindView(R.id.nsv_detail_view)
+    public NestedScrollView mScrollViewSpeciesDetail;
+    @BindView(R.id.pb_species_detail)
+    public ProgressBar mProgressBar;
+
     private StfalconImageViewer<ImageBundle> mImageViewer;
+    private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
+
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +106,27 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
         ButterKnife.bind(this);
 
         mSelectedSpecies = getIntent().getExtras().getParcelable("selectedSpecies");
-        initToolbar();
-        setHeroImage();
-        setTextFields();
-        initMoreInfoLink();
+        mSelectedSpeciesId = getIntent().getExtras().getString("selectedSpeciesId");
+        mSelectedSpeciesName = getIntent().getExtras().getString("selectedSpeciesName");
 
+        if(mSelectedSpecies != null) {
+            setHeroImage();
+            setTextFields();
+            initToolbar(mSelectedSpecies.getCommonName());
+            initMoreInfoLink();
+            initImageViewer(savedInstanceState);
+            initRecyclerView();
+        } else if(mSelectedSpeciesId != null && mSelectedSpeciesName != null) {
+            initToolbar(mSelectedSpeciesName);
+            mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
+            loaderScreen(true);
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, mSelectedSpeciesId);
+            subscribeObservers();
+            mScrollViewSpeciesDetail.setVisibility(View.GONE);
+        }
+    }
+
+    private void initImageViewer(Bundle savedInstanceState) {
         if (savedInstanceState != null){
             int currentPosition = 0;
             boolean imageViewerOpen = savedInstanceState.getBoolean("imageViewerOpen");
@@ -101,9 +134,6 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             if(imageViewerOpen)
                 showAdditionalImages(currentPosition);
         }
-
-        initRecyclerView();
-
     }
 
     private void initMoreInfoLink() {
@@ -222,11 +252,10 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             mMoreInfo.setText(mSelectedSpecies.getMoreInfoLink());
     }
 
-
-    public void initToolbar() {
-        Toolbar toolbar  = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(mSelectedSpecies.getCommonName());
+    public void initToolbar(String title) {
+        mToolbar  = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -263,5 +292,34 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
 
     }
 
+    private void subscribeObservers() {
+        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
+            @Override
+            public void onChanged(List<FloraSpecies> floraSpecies) {
+                if(floraSpecies != null) {
+                    if(mFloraSpeciesListViewModel.getSelectedFloraId().equals(floraSpecies.get(0).getId())) {
+                        mSelectedSpecies = floraSpecies.get(0);
+                        setHeroImage();
+                        setTextFields();
+                        initMoreInfoLink();
+                        initRecyclerView();
+                        loaderScreen(false);
+                    }
+                }
+            }
+        });
+    }
+
+    private void loaderScreen(Boolean action) {
+        if(action) {
+            mHeroImage.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mScrollViewSpeciesDetail.setVisibility(View.GONE);
+        } else {
+            mHeroImage.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+            mScrollViewSpeciesDetail.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

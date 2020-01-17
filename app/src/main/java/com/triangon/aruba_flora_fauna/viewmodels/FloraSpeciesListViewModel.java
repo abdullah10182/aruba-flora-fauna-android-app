@@ -12,6 +12,7 @@ public class FloraSpeciesListViewModel extends ViewModel {
 
     private FloraSpeciesRepository mFloraSpeciesRepository;
     private String mSelectedFloraCategory;
+    private String mSelectedFloraId;
 
     public FloraSpeciesListViewModel(){
         mFloraSpeciesRepository = FloraSpeciesRepository.getInstance();
@@ -21,12 +22,17 @@ public class FloraSpeciesListViewModel extends ViewModel {
         return mFloraSpeciesRepository.getFloraSpecies();
     }
 
-    public void getFloraSpeciesApi(String category) {
+    public void getFloraSpeciesApi(String category, String speciesId) {
         mSelectedFloraCategory = category;
-        mFloraSpeciesRepository.getFloraSpeciesApi(category);
+        mSelectedFloraId = speciesId;
+        mFloraSpeciesRepository.getFloraSpeciesApi(category, speciesId);
     }
 
     public String getSelectedFloraCategory() {
         return mSelectedFloraCategory;
+    }
+
+    public String getSelectedFloraId() {
+        return mSelectedFloraId;
     }
 }

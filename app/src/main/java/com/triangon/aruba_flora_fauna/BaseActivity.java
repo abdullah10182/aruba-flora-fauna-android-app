@@ -1,5 +1,6 @@
 package com.triangon.aruba_flora_fauna;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.triangon.aruba_flora_fauna.activities.FloraSpeciesDetailActivity;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
@@ -135,6 +137,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             String query = (String) adapterView.getItemAtPosition(i);
                             String selectedId = getSelectedId(floraSpecies, query);
+                            Intent intent = new Intent(getApplicationContext(), FloraSpeciesDetailActivity.class);
+                            intent.putExtra("selectedSpeciesId", selectedId);
+                            intent.putExtra("selectedSpeciesName", query);
+                            startActivity(intent);
                         }
                     });
                 }
@@ -153,8 +159,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         for(FloraSpecies species : floraSpecies) {
             if(species.getCommonName().equals(nameClean)){
                 selectedId = species.getId();
-                String query1 = selectedId + species.getCommonName();
-                Toast.makeText(getApplicationContext(), query1, Toast.LENGTH_SHORT).show();
                 break;
             }
         }

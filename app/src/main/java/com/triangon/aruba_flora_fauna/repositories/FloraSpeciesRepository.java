@@ -34,8 +34,8 @@ public class FloraSpeciesRepository {
         return mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestions();
     }
 
-    public void getFloraSpeciesApi(String category) {
-        mFloraSpeciesApiClient.getFloraSpeciesApi(category);
+    public void getFloraSpeciesApi(String category, String speciesId) {
+        mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId);
     }
 
     public void getFloraSpeciesSuggestionsApi() {

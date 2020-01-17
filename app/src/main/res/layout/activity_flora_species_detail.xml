@@ -28,7 +28,6 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:id="@+id/iv_species_detail_hero_image"
-                android:src="@drawable/home_hero_bg"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier=".7" />
 
@@ -51,7 +50,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:id="@+id/pb_species_detail"
+        android:layout_gravity="center"/>
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_detail_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
