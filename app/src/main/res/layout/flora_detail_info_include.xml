@@ -44,13 +44,13 @@
                         android:id="@+id/tv_category_name"
                         android:text="Test"/>
                 </LinearLayout>
+                <!--/-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightest_light_grey"
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="3dp"/>
-                <!--/-->
 
                 <!-- family name -->
                 <LinearLayout
@@ -72,63 +72,100 @@
                         android:id="@+id/tv_family_name"
                         android:text="Test"/>
                 </LinearLayout>
+                <!--/-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightest_light_grey"
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="3dp"/>
-                <!--/-->
 
-                <!-- Geo orgin name -->
-                <LinearLayout
+                <!-- Geo origin name -->
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp">
-                    <TextView
+                    android:layout_height="wrap_content">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        android:text="@string/geographical_origin"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/dark_text"
-                        android:textSize="18sp"
-                        android:id="@+id/tv_geo_origin_name"
-                        android:text="Test"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
+                            android:text="@string/geographical_origin"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_text"
+                            android:textSize="18sp"
+                            android:id="@+id/tv_geo_origin_name"
+                            android:text="Test"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="13dp"
+                        android:visibility="gone"
+                        android:id="@+id/iv_invasive_badge"
+                        android:src="@drawable/ic_invasive_badge" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="13dp"
+                        android:visibility="gone"
+                        android:id="@+id/iv_native_badge"
+                        android:src="@drawable/ic_aruba_badge" />
+                </FrameLayout>
+                <!--/-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightest_light_grey"
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="3dp"/>
-                <!--/-->
 
                 <!-- Protected name -->
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp">
-                    <TextView
+                    android:layout_height="wrap_content">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        android:text="@string/protected_locally"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/dark_text"
-                        android:textSize="18sp"
-                        android:id="@+id/tv_protected_locally_name"
-                        android:text="Test"/>
-                </LinearLayout>
-                <!--/-->
+                        android:orientation="vertical"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
+                            android:text="@string/protected_locally"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_text"
+                            android:textSize="18sp"
+                            android:id="@+id/tv_protected_locally_name"
+                            android:text="Test"/>
+                        <!--/-->
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="12dp"
+                        android:visibility="gone"
+                        android:id="@+id/iv_protected_badge"
+                        android:src="@drawable/ic_protected_badge" />
+                </FrameLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -72,6 +72,13 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     public RecyclerView mRecyclerView;
     private AdditionalImagesRecyclerAdapter mAdapter;
 
+    @BindView(R.id.iv_native_badge)
+    public ImageView mNativeBadge;
+    @BindView(R.id.iv_invasive_badge)
+    public ImageView mInvasiveBadge;
+    @BindView(R.id.iv_protected_badge)
+    public ImageView mProtectedBadge;
+
     private StfalconImageViewer<ImageBundle> mImageViewer;
 
     @Override
@@ -148,7 +155,8 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
               @Override
               public void onImageChange(int position) {
                   requestOptions.placeholder(R.drawable.aff_logo_grey);
-                  Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
+                  if(!mSelectedSpecies.getAdditionalImages().get(position).getImageTitle().equals(""))
+                    Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
               }
           })
           .withDismissListener(new OnDismissListener() {
@@ -170,6 +178,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     }
 
     private void setTextFields() {
+
         //names
         if(mSelectedSpecies.getCommonName() != null)
             mCommonName.setText(mSelectedSpecies.getCommonName());
@@ -177,20 +186,38 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             mPapiamentoName.setText(mSelectedSpecies.getPapiamentoName());
         if(mSelectedSpecies.getScientificName() != null)
             mScientificName.setText(mSelectedSpecies.getScientificName());
+
         //description
         if(mSelectedSpecies.getDescription() != null)
             mDescription.setHtml(mSelectedSpecies.getDescription());
+
         //info
         if(mSelectedSpecies.getCategoryName() != null)
             mCategoryName.setText(mSelectedSpecies.getCategoryName());
         if(mSelectedSpecies.getFamily() != null)
             mFamilyName.setText(mSelectedSpecies.getFamily());
-        if(mSelectedSpecies.getStatusName() != null)
+        if(mSelectedSpecies.getStatusName() != null) {
             mGeoOriginName.setText(mSelectedSpecies.getStatusName());
-        if(mSelectedSpecies.isProtectedLocally())
+            if(mSelectedSpecies.getStatusId().equals("11")) {
+                mInvasiveBadge.setVisibility(View.VISIBLE);
+                mNativeBadge.setVisibility(View.GONE);
+            }
+            else if(mSelectedSpecies.getStatusId().equals("13")) {
+                mNativeBadge.setVisibility(View.VISIBLE);
+                mInvasiveBadge.setVisibility(View.GONE);
+            }
+
+        }
+        if(mSelectedSpecies.isProtectedLocally()) {
             mProtectedName.setText("Yes");
-        else
+            mProtectedBadge.setVisibility(View.VISIBLE);
+        }
+        else {
             mProtectedName.setText("No");
+            mProtectedBadge.setVisibility(View.GONE);
+        }
+
+        //more info
         if(mSelectedSpecies.getMoreInfoLink() != null)
             mMoreInfo.setText(mSelectedSpecies.getMoreInfoLink());
     }
@@ -231,7 +258,8 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     @Override
     public void onAdditionalmageClick(int position) {
         showAdditionalImages(position);
-        Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
+        if(!mSelectedSpecies.getAdditionalImages().get(position).getImageTitle().equals(""))
+            Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
 
     }
 
