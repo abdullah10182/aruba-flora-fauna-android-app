@@ -3,4 +3,13 @@
     <string name="protected_badge_text">Protected</string>
     <string name="endemic_badge_text">Endemic</string>
     <string name="invasive_badge_text">Invasive</string>
+    <string name="description">Description</string>
+    <string name="common_name">Common Name</string>
+    <string name="papiamento_name">Papiamento Name</string>
+    <string name="scientific_name">Scientific Name</string>
+    <string name="category">Category</string>
+    <string name="family">Family</string>
+    <string name="geographical_origin">Geographical Origin</string>
+    <string name="protected_locally">Protected Locally</string>
+    <string name="more_info">More Info</string>
 </resources>

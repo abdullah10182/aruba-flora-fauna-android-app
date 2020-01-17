@@ -70,4 +70,5 @@ dependencies {
     //stfalcon image viewer
     implementation "com.github.stfalcon:stfalcon-imageviewer:0.1.0"
 
+
 }

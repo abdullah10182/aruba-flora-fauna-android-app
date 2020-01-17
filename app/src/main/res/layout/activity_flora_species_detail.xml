@@ -59,27 +59,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="true"
             android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:background="@color/colorPrimaryDark"
                     android:id="@+id/rv_additional_images"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp"
-                android:orientation="vertical">
+                    <!--names-->
+                    <include layout="@layout/flora_detail_names_include"/>
+                    <!--/-->
 
-                <org.sufficientlysecure.htmltextview.HtmlTextView
-                    android:textSize="@dimen/flora_category_title_text_size"
-                    android:id="@+id/tv_species_detail_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+                    <!--info-->
+                    <include layout="@layout/flora_detail_info_include"/>
+                    <!--/-->
+
+                    <!--Description-->
+                    <include layout="@layout/flora_detail_description_include"/>
+                    <!--/-->
 
         </LinearLayout>
 

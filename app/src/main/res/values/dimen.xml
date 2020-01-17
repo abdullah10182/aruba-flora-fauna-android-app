@@ -8,4 +8,8 @@
     <dimen name="flora_species_list_title_text_size">20sp</dimen>
     <dimen name="flora_species_list_sub_title_text_size">16sp</dimen>
     <dimen name="flora_species_list_small_text_size">12sp</dimen>
+
+    <dimen name="small_radius">5dp</dimen>
+    <dimen name="medium_radius">10dp</dimen>
+    <dimen name="large_radius">20dp</dimen>
 </resources>

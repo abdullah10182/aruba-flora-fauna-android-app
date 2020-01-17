@@ -11,9 +11,12 @@
         android:roundIcon="@mipmap/ic_aff_flora_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoActionBar">
-        <activity android:name=".activities.FloraSpeciesDetailActivity"></activity>
-        <activity android:name=".activities.FloraSpeciesListActivity"></activity>
-        <activity android:name=".activities.FloraCategoryListActivity" android:theme="@style/AppThemeNoActionBar">
+        <activity android:name=".activities.WebViewActivity"></activity>
+        <activity android:name=".activities.FloraSpeciesDetailActivity" />
+        <activity android:name=".activities.FloraSpeciesListActivity" />
+        <activity
+            android:name=".activities.FloraCategoryListActivity"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
