@@ -49,12 +49,12 @@ public class FloraSpeciesApiClient {
         return mFloraSpeciesSuggestions;
     }
 
-    public void getFloraSpeciesApi(String category, String speciesId) {
+    public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
         if(mRetrieveFloraSpeciesRunnable != null) {
             mRetrieveFloraSpeciesRunnable = null;
         }
 
-        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId);
+        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId, searchQuery);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
@@ -87,25 +87,26 @@ public class FloraSpeciesApiClient {
 
         private String mCategory;
         private String mSpeciesId;
+        private String mSearchQuery;
         boolean cancelRequest;
 
-        public RetrieveFloraSpeciesRunnable(String category, String speciesId) {
+        public RetrieveFloraSpeciesRunnable(String category, String speciesId, String searchQuery) {
             mCategory = category;
             mSpeciesId = speciesId;
+            mSearchQuery = searchQuery;
             cancelRequest = false;
         }
 
         @Override
         public void run() {
             try {
-                Response response = getFloraSpecies(mCategory, mSpeciesId).execute();
+                Response response = getFloraSpecies(mCategory, mSpeciesId, mSearchQuery).execute();
                 if(cancelRequest) {
                     return;
                 }
                 if(response.code() == 200) {
                     List<FloraSpecies> list = new ArrayList<>(((FloraSpeciesListResponse)response.body()).getFloraSpecies());
                     mFloraSpecies.postValue(list);
-                    System.out.println("------------" + list);
                 } else {
                     String error = response.errorBody().string();
                     Log.e(TAG, "run: " + error);
@@ -116,8 +117,8 @@ public class FloraSpeciesApiClient {
             }
         }
 
-        private Call<FloraSpeciesListResponse> getFloraSpecies(String category, String speciesId) {
-            return ServiceGenerator.getFloraSpeciesApi().getFloraSpecies(category, speciesId);
+        private Call<FloraSpeciesListResponse> getFloraSpecies(String category, String speciesId, String searchQuery) {
+            return ServiceGenerator.getFloraSpeciesApi().getFloraSpecies(category, speciesId, searchQuery);
         }
 
         private void cancelRequest() {
@@ -160,6 +161,10 @@ public class FloraSpeciesApiClient {
         private void cancelRequest() {
             Log.d(TAG, "cancelRequest: canceling search request");
         }
+    }
+
+    public void resetFloraSpecies() {
+        mFloraSpecies.setValue(null);
     }
 
 }

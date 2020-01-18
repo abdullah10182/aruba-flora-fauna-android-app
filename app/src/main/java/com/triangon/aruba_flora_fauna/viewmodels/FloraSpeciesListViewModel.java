@@ -13,6 +13,7 @@ public class FloraSpeciesListViewModel extends ViewModel {
     private FloraSpeciesRepository mFloraSpeciesRepository;
     private String mSelectedFloraCategory;
     private String mSelectedFloraId;
+    private String mSelectedSearchQuery;
 
     public FloraSpeciesListViewModel(){
         mFloraSpeciesRepository = FloraSpeciesRepository.getInstance();
@@ -22,10 +23,11 @@ public class FloraSpeciesListViewModel extends ViewModel {
         return mFloraSpeciesRepository.getFloraSpecies();
     }
 
-    public void getFloraSpeciesApi(String category, String speciesId) {
+    public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
         mSelectedFloraCategory = category;
         mSelectedFloraId = speciesId;
-        mFloraSpeciesRepository.getFloraSpeciesApi(category, speciesId);
+        mSelectedSearchQuery = searchQuery;
+        mFloraSpeciesRepository.getFloraSpeciesApi(category, speciesId, searchQuery);
     }
 
     public String getSelectedFloraCategory() {
@@ -34,5 +36,13 @@ public class FloraSpeciesListViewModel extends ViewModel {
 
     public String getSelectedFloraId() {
         return mSelectedFloraId;
+    }
+
+    public String getmSelectedSearchQuery() {
+        return mSelectedSearchQuery;
+    }
+
+    public void resetFloraSpecies() {
+        this.mFloraSpeciesRepository.resetFloraSpecies();
     }
 }

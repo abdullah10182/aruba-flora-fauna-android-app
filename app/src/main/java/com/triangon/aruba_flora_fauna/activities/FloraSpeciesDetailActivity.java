@@ -120,7 +120,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             initToolbar(mSelectedSpeciesName);
             mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
             loaderScreen(true);
-            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, mSelectedSpeciesId);
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, mSelectedSpeciesId, null);
             subscribeObservers();
             mScrollViewSpeciesDetail.setVisibility(View.GONE);
         }

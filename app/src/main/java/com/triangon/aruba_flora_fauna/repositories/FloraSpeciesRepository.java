@@ -34,12 +34,16 @@ public class FloraSpeciesRepository {
         return mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestions();
     }
 
-    public void getFloraSpeciesApi(String category, String speciesId) {
-        mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId);
+    public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
+        mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId, searchQuery);
     }
 
     public void getFloraSpeciesSuggestionsApi() {
         mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi();
+    }
+
+    public void resetFloraSpecies() {
+        mFloraSpeciesApiClient.resetFloraSpecies();
     }
 
 

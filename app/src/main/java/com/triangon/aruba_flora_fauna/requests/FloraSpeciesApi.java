@@ -13,7 +13,9 @@ public interface FloraSpeciesApi {
             @Query("category")
             String category,
             @Query("species_id")
-            String speciesId
+            String speciesId,
+            @Query("q")
+            String searchQuery
     );
 
     @GET("aff-api/flora-species-search-suggestions")

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesDetailActivity;
+import com.triangon.aruba_flora_fauna.activities.FloraSpeciesListActivity;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
@@ -80,6 +81,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mSearchView.closeSearch();
+                Intent intent = new Intent(getApplicationContext(), FloraSpeciesListActivity.class);
+                intent.putExtra("searchQuery", query);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
                 return true;
             }
 
@@ -93,17 +99,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
 
 
-        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-
-            }
-        });
+//        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+//            @Override
+//            public void onSearchViewShown() {
+//
+//            }
+//
+//            @Override
+//            public void onSearchViewClosed() {
+//
+//            }
+//        });
 
         return true;
     }
@@ -135,6 +141,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     mSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            mSearchView.closeSearch();
                             String query = (String) adapterView.getItemAtPosition(i);
                             String selectedId = getSelectedId(floraSpecies, query);
                             Intent intent = new Intent(getApplicationContext(), FloraSpeciesDetailActivity.class);

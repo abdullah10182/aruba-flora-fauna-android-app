@@ -5,6 +5,7 @@ import com.triangon.aruba_flora_fauna.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
@@ -27,8 +28,13 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
     @BindView(R.id.rv_flora_species_list)
     public RecyclerView mRecyclerView;
+    @BindView(R.id.tv_no_results)
+    public TextView mNoResults;
     private FloraSpeciesRecyclerAdapter mAdapter;
     private String mSelectedCategory;
+    private String mSelectedCategoryName;
+    private String mSearchQuery;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +45,34 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
 
         mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
         mSelectedCategory = getIntent().getExtras().getString("categoryId");
+        mSelectedCategoryName = getIntent().getExtras().getString("categoryName");
+        mSearchQuery = getIntent().getExtras().getString("searchQuery");
+
         initRecyclerView();
         subscribeObservers();
-        getFloraSpeciesApi(mSelectedCategory);
-        initToolbar();
+        showProgressBar(true);
+        initSpeciesList();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        showProgressBar(true);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        initSpeciesList();
+    }
+
+    private void initSpeciesList() {
+        if(mSelectedCategory != null && mSelectedCategoryName != null) {
+            initToolbar(mSelectedCategoryName);
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
+        } else if (mSearchQuery != null){
+            initToolbar("Search Results: " + mSearchQuery);
+            mFloraSpeciesListViewModel.resetFloraSpecies();
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, null, mSearchQuery);
+        }
     }
 
     private void initRecyclerView() {
@@ -51,22 +81,28 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void getFloraSpeciesApi(String categoryId) {
-        showProgressBar(true);
-        mFloraSpeciesListViewModel.getFloraSpeciesApi(categoryId, null);
-    }
-
     private void subscribeObservers() {
+        showProgressBar(true);
         mRecyclerView.setVisibility(View.INVISIBLE);
         mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
             @Override
             public void onChanged(List<FloraSpecies> floraSpecies) {
-                if(floraSpecies != null) {
-                    if(mFloraSpeciesListViewModel.getSelectedFloraCategory().equals(floraSpecies.get(0).getCategoryId())){
+                if(floraSpecies != null && floraSpecies.size() > 0) {
+                    mAdapter.setFloraSpecies(floraSpecies);
+                    if(mSelectedCategory != null && mFloraSpeciesListViewModel.getSelectedFloraCategory().equals(floraSpecies.get(0).getCategoryId())){
                         mRecyclerView.setVisibility(View.VISIBLE);
-                        mAdapter.setFloraSpecies(floraSpecies);
                         showProgressBar(false);
+                        mNoResults.setVisibility(View.GONE);
+                        mAdapter.setFloraSpecies(floraSpecies);
+                    } else if(mSearchQuery != null){
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        showProgressBar(false);
+                        mNoResults.setVisibility(View.GONE);
+                        mAdapter.setFloraSpecies(floraSpecies);
                     }
+                } else if (floraSpecies != null && floraSpecies.size() == 0 && mSelectedCategory == null){
+                    mNoResults.setVisibility(View.VISIBLE);
+                    showProgressBar(false);
                 }
             }
         });
@@ -79,11 +115,10 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         startActivity(intent);
     }
 
-    public void initToolbar() {
-        Toolbar toolbar  = findViewById(R.id.toolbar);
-        String categoryName = getIntent().getExtras().getString("categoryName");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(categoryName);
+    public void initToolbar(String title) {
+        mToolbar  = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
