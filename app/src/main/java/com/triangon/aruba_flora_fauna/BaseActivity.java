@@ -61,9 +61,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
-        LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
+        //LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
         subscribeObservers();
-        initLatestSpeciesStorage();
+        //initLatestSpeciesStorage();
     }
 
     @Override
