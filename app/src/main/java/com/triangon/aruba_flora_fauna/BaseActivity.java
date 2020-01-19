@@ -1,7 +1,9 @@
 package com.triangon.aruba_flora_fauna;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,15 +14,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesDetailActivity;
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesListActivity;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
+import com.triangon.aruba_flora_fauna.requests.FloraSpeciesApi;
+import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
+import com.triangon.aruba_flora_fauna.requests.responses.FloraSpeciesListResponse;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
 import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesAppWidget;
 import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesWidgetService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +40,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -43,12 +55,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Nullable
     private ProgressBar mSearchProgressBar;
     private boolean mSearchInitiated = false;
+    private static final String LATEST_SPECIES_PREFERENCES = "myPrefrences";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
+        LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
         subscribeObservers();
+        initLatestSpeciesStorage();
     }
 
     @Override
@@ -178,4 +193,56 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void openSearch() {
         mSearchView.showSearch();
     }
+
+    private void initLatestSpeciesStorage() {
+        SharedPreferences prefs = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE);
+        long latestFloraSpeciesSavedTime = prefs.getLong("latestFloraSpeciesSavedTime",0);
+        long currentTimeMillis = System.currentTimeMillis();
+
+
+        if(latestFloraSpeciesSavedTime == 0 || currentTimeMillis - latestFloraSpeciesSavedTime > 1800000) {
+            FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
+
+            Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
+                    .getFloraSpeciesSuggestions("created");
+
+            responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
+                @Override
+                public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
+                    if(response.code() == 200) {
+                        List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
+                        setLatestSpeciesDataInSharedPreferences(speciesList);
+
+                    } else {
+                        try {
+                            Log.d(TAG, "onResponse: " + response.errorBody().string() );
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
+
+                }
+            });
+        }
+    }
+
+    public void setLatestSpeciesDataInSharedPreferences(List<FloraSpecies> latestFloraSpecies) {
+        SharedPreferences.Editor editor = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE).edit();
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        String jsonLatestFloraSpecies = gson.toJson(latestFloraSpecies);
+        //set time
+        long currentTimeMillis = System.currentTimeMillis();
+
+        editor.putString("latestFloraSpecies", jsonLatestFloraSpecies);
+        editor.putLong("latestFloraSpeciesSavedTime", currentTimeMillis);
+        editor.commit();
+    }
+
 }

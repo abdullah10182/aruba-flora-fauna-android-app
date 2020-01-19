@@ -20,7 +20,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/latest_flora_species_app_widget_info" />
         </receiver>
-        <service android:name=".widgets.LatestFloraSpeciesWidgetService" />
+        <service
+            android:name=".widgets.LatestFloraSpeciesWidgetService"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
 
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.FloraSpeciesDetailActivity" />

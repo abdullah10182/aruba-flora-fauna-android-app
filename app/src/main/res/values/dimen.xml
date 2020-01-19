@@ -12,4 +12,5 @@
     <dimen name="small_radius">5dp</dimen>
     <dimen name="medium_radius">10dp</dimen>
     <dimen name="large_radius">20dp</dimen>
+    <dimen name="widget_time_ms">1800000</dimen> <!-- 30min for now -->
 </resources>
