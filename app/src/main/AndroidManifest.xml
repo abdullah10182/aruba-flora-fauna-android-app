@@ -11,7 +11,18 @@
         android:roundIcon="@mipmap/ic_aff_flora_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoActionBar">
-        <activity android:name=".activities.WebViewActivity"></activity>
+        <receiver android:name=".widgets.LatestFloraSpeciesAppWidget" android:label="Latest Flora Species">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/latest_flora_species_app_widget_info" />
+        </receiver>
+        <service android:name=".widgets.LatestFloraSpeciesWidgetService" />
+
+        <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.FloraSpeciesDetailActivity" />
         <activity android:name=".activities.FloraSpeciesListActivity" />
         <activity

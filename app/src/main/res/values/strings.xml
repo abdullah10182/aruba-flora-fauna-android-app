@@ -13,4 +13,6 @@
     <string name="protected_locally">Protected Locally</string>
     <string name="more_info">More Info</string>
     <string name="no_results">No Results</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

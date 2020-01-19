@@ -32,14 +32,16 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey);
+//        RequestOptions requestOptions = new RequestOptions()
+//                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
 
         ((FloraCategoryViewHolder)holder).mTitle.setText(mFloraCategories.get(position).getName());
 
         Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(requestOptions)
+                //.setDefaultRequestOptions(requestOptions)
                 .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey)
                 .into(((FloraCategoryViewHolder)holder).mImage);
 
     }

@@ -54,7 +54,6 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         initSpeciesList();
     }
 
-
     @Override
     protected void onRestart() {
         super.onRestart();

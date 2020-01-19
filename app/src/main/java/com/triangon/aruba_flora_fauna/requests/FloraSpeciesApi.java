@@ -19,5 +19,8 @@ public interface FloraSpeciesApi {
     );
 
     @GET("aff-api/flora-species-search-suggestions")
-    Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions();
+    Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions(
+            @Query("sort_by")
+            String sortBy
+    );
 }

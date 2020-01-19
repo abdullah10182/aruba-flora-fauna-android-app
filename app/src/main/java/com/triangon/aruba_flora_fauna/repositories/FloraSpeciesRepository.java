@@ -38,8 +38,8 @@ public class FloraSpeciesRepository {
         mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId, searchQuery);
     }
 
-    public void getFloraSpeciesSuggestionsApi() {
-        mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi();
+    public void getFloraSpeciesSuggestionsApi(String sortBy) {
+        mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi(sortBy);
     }
 
     public void resetFloraSpecies() {

@@ -20,7 +20,7 @@ public class FloraSpeciesSuggestionsViewModel extends ViewModel {
         return mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestions();
     }
 
-    public void getFloraSpeciesSuggestionsApi() {
-        mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestionsApi();
+    public void getFloraSpeciesSuggestionsApi(String sortBy) {
+        mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestionsApi(sortBy);
     }
 }

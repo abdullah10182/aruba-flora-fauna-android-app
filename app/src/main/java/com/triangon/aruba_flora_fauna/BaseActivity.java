@@ -18,6 +18,8 @@ import com.triangon.aruba_flora_fauna.activities.FloraSpeciesListActivity;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
+import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesAppWidget;
+import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesWidgetService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +119,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void getFloraSpeciesSuggestionsApi() {
         mSearchInitiated = true;
         mSearchProgressBar.setVisibility(View.VISIBLE);
-        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestionsApi();
+        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestionsApi(null);
     }
 
     private void subscribeObservers() {

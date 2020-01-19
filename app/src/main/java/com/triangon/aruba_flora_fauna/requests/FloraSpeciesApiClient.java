@@ -66,12 +66,12 @@ public class FloraSpeciesApiClient {
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
-    public void getFloraSpeciesSuggestionsApi() {
+    public void getFloraSpeciesSuggestionsApi(String sortBy) {
         if(mRetrieveFloraSpeciesSuggestionsRunnable != null) {
             mRetrieveFloraSpeciesSuggestionsRunnable = null;
         }
 
-        mRetrieveFloraSpeciesSuggestionsRunnable = new RetrieveFloraSpeciesSuggestionsRunnable();
+        mRetrieveFloraSpeciesSuggestionsRunnable = new RetrieveFloraSpeciesSuggestionsRunnable(sortBy);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesSuggestionsRunnable);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
@@ -129,15 +129,17 @@ public class FloraSpeciesApiClient {
     public class RetrieveFloraSpeciesSuggestionsRunnable implements Runnable {
 
         boolean cancelRequest;
+        private String mSortBy;
 
-        public RetrieveFloraSpeciesSuggestionsRunnable() {
+        public RetrieveFloraSpeciesSuggestionsRunnable(String sortBy) {
+            mSortBy = sortBy;
             cancelRequest = false;
         }
 
         @Override
         public void run() {
             try {
-                Response response = getFloraSpeciesSuggestions().execute();
+                Response response = getFloraSpeciesSuggestions(mSortBy).execute();
                 if(cancelRequest) {
                     return;
                 }
@@ -154,8 +156,8 @@ public class FloraSpeciesApiClient {
             }
         }
 
-        private Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions() {
-            return ServiceGenerator.getFloraSpeciesApi().getFloraSpeciesSuggestions();
+        private Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions(String sortBy) {
+            return ServiceGenerator.getFloraSpeciesApi().getFloraSpeciesSuggestions(sortBy);
         }
 
         private void cancelRequest() {
