@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.squareup.picasso.Picasso;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.ImageBundle;
 
@@ -32,15 +33,19 @@ public class AdditionalImagesRecyclerAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey);
-
-        //((AdditionalImagesViewHolder)holder).mTitle.setText(mAdditionalImages.get(position).getImageTitle());
-
-        Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(requestOptions)
+        Picasso.get()
                 .load(mAdditionalImages.get(position).getImageSmall())
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey)
                 .into(((AdditionalImagesViewHolder)holder).mImage);
+
+//        RequestOptions requestOptions = new RequestOptions()
+//                .placeholder(R.drawable.aff_logo_grey);
+//
+//        Glide.with(holder.itemView.getContext())
+//                .setDefaultRequestOptions(requestOptions)
+//                .load(mAdditionalImages.get(position).getImageSmall())
+//                .into(((AdditionalImagesViewHolder)holder).mImage);
 
     }
 

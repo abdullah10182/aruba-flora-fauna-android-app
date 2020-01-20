@@ -31,12 +31,14 @@ import com.bumptech.glide.request.RequestOptions;
 
 
 import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Picasso;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.adapters.AdditionalImagesRecyclerAdapter;
+import com.triangon.aruba_flora_fauna.adapters.FloraCategoryViewHolder;
 import com.triangon.aruba_flora_fauna.adapters.OnAdditionalImageListener;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.models.ImageBundle;
@@ -92,6 +94,8 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     public NestedScrollView mScrollViewSpeciesDetail;
     @BindView(R.id.pb_species_detail)
     public ProgressBar mProgressBar;
+
+    private ImageView mPlaceholderImage;
 
     private StfalconImageViewer<ImageBundle> mImageViewer;
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
@@ -155,7 +159,8 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             View row = mRecyclerView.getLayoutManager().findViewByPosition(currentPosition);
             smallImage = row.findViewById(R.id.iv_additional_image);
             requestOptions.placeholder(smallImage.getDrawable());
-        } else {
+        }
+        else {
             requestOptions.placeholder(R.drawable.aff_logo_grey);
         }
 
@@ -184,7 +189,6 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
           .withImageChangeListener(new OnImageChangeListener() {
               @Override
               public void onImageChange(int position) {
-                  requestOptions.placeholder(R.drawable.aff_logo_grey);
                   if(!mSelectedSpecies.getAdditionalImages().get(position).getImageTitle().equals(""))
                     Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
               }
@@ -199,11 +203,17 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     }
 
     private void setHeroImage() {
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey);
-        Glide.with(this)
-                .setDefaultRequestOptions(requestOptions)
+//        RequestOptions requestOptions = new RequestOptions()
+//                .placeholder(R.drawable.aff_logo_grey);
+//        Glide.with(this)
+//                .setDefaultRequestOptions(requestOptions)
+//                .load(mSelectedSpecies.getMainImage().getImageThumbnail())
+//                .into(mHeroImage);
+
+        Picasso.get()
                 .load(mSelectedSpecies.getMainImage().getImageThumbnail())
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey)
                 .into(mHeroImage);
     }
 

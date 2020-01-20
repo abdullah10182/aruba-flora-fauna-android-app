@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.squareup.picasso.Picasso;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 
@@ -32,19 +33,25 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey);
-
 
         ((FloraSpeciesViewHolder)holder).mTitle.setText(mFloraSpecies.get(position).getCommonName());
         ((FloraSpeciesViewHolder)holder).mSubTitle.setText(mFloraSpecies.get(position).getPapiamentoName());
         ((FloraSpeciesViewHolder)holder).mCategory.setText("Category: " + mFloraSpecies.get(position).getCategoryName());
         ((FloraSpeciesViewHolder)holder).mFamily.setText("Family: " + mFloraSpecies.get(position).getFamily());
 
-        Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(requestOptions)
+        Picasso.get()
                 .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey)
                 .into(((FloraSpeciesViewHolder)holder).mImage);
+
+//        RequestOptions requestOptions = new RequestOptions()
+//                .placeholder(R.drawable.aff_logo_grey);
+//
+//        Glide.with(holder.itemView.getContext())
+//                .setDefaultRequestOptions(requestOptions)
+//                .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
+//                .into(((FloraSpeciesViewHolder)holder).mImage);
 
         //protected
         if(mFloraSpecies.get(position).isProtectedLocally()){

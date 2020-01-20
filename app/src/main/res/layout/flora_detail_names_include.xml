@@ -97,6 +97,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/dark_text"
                         android:textSize="18sp"
+                        android:textStyle="italic"
                         android:id="@+id/tv_scientific_name"
                         android:text="Test"/>
                 </LinearLayout>

@@ -27,7 +27,7 @@ dependencies {
     def retrofitVersion = "2.7.1"
     def lifecycle_version = "2.1.0"
     def supportVersion = "1.1.0"
-    def glideVersion = "4.10.0"
+    def glideVersion = "4.11.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$supportVersion"
@@ -69,6 +69,9 @@ dependencies {
 
     //stfalcon image viewer
     implementation "com.github.stfalcon:stfalcon-imageviewer:0.1.0"
+
+    //picasoo
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 
 }
