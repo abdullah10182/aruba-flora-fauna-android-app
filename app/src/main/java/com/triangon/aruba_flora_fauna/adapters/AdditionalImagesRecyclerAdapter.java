@@ -33,19 +33,13 @@ public class AdditionalImagesRecyclerAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Picasso.get()
-                .load(mAdditionalImages.get(position).getImageSmall())
-                .placeholder(R.drawable.aff_logo_grey)
-                .error(R.drawable.aff_logo_grey)
-                .into(((AdditionalImagesViewHolder)holder).mImage);
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
 
-//        RequestOptions requestOptions = new RequestOptions()
-//                .placeholder(R.drawable.aff_logo_grey);
-//
-//        Glide.with(holder.itemView.getContext())
-//                .setDefaultRequestOptions(requestOptions)
-//                .load(mAdditionalImages.get(position).getImageSmall())
-//                .into(((AdditionalImagesViewHolder)holder).mImage);
+        Glide.with(holder.itemView.getContext())
+                .setDefaultRequestOptions(requestOptions)
+                .load(mAdditionalImages.get(position).getImageSmall())
+                .into(((AdditionalImagesViewHolder)holder).mImage);
 
     }
 

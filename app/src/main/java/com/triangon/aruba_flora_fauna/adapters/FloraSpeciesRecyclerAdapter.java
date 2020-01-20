@@ -39,19 +39,13 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         ((FloraSpeciesViewHolder)holder).mCategory.setText("Category: " + mFloraSpecies.get(position).getCategoryName());
         ((FloraSpeciesViewHolder)holder).mFamily.setText("Family: " + mFloraSpecies.get(position).getFamily());
 
-        Picasso.get()
-                .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
-                .placeholder(R.drawable.aff_logo_grey)
-                .error(R.drawable.aff_logo_grey)
-                .into(((FloraSpeciesViewHolder)holder).mImage);
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
 
-//        RequestOptions requestOptions = new RequestOptions()
-//                .placeholder(R.drawable.aff_logo_grey);
-//
-//        Glide.with(holder.itemView.getContext())
-//                .setDefaultRequestOptions(requestOptions)
-//                .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
-//                .into(((FloraSpeciesViewHolder)holder).mImage);
+        Glide.with(holder.itemView.getContext())
+                .setDefaultRequestOptions(requestOptions)
+                .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
+                .into(((FloraSpeciesViewHolder)holder).mImage);
 
         //protected
         if(mFloraSpecies.get(position).isProtectedLocally()){

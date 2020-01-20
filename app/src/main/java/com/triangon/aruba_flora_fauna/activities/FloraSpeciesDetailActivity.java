@@ -95,8 +95,6 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     @BindView(R.id.pb_species_detail)
     public ProgressBar mProgressBar;
 
-    private ImageView mPlaceholderImage;
-
     private StfalconImageViewer<ImageBundle> mImageViewer;
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
 
@@ -189,6 +187,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
           .withImageChangeListener(new OnImageChangeListener() {
               @Override
               public void onImageChange(int position) {
+                  requestOptions.placeholder(R.drawable.aff_logo_grey);
                   if(!mSelectedSpecies.getAdditionalImages().get(position).getImageTitle().equals(""))
                     Toast.makeText(getApplicationContext(), mSelectedSpecies.getAdditionalImages().get(position).getImageTitle(), Toast.LENGTH_LONG).show();
               }
@@ -203,17 +202,11 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
     }
 
     private void setHeroImage() {
-//        RequestOptions requestOptions = new RequestOptions()
-//                .placeholder(R.drawable.aff_logo_grey);
-//        Glide.with(this)
-//                .setDefaultRequestOptions(requestOptions)
-//                .load(mSelectedSpecies.getMainImage().getImageThumbnail())
-//                .into(mHeroImage);
-
-        Picasso.get()
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey);
+        Glide.with(this)
+                .setDefaultRequestOptions(requestOptions)
                 .load(mSelectedSpecies.getMainImage().getImageThumbnail())
-                .placeholder(R.drawable.aff_logo_grey)
-                .error(R.drawable.aff_logo_grey)
                 .into(mHeroImage);
     }
 

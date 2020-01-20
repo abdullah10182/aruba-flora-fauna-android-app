@@ -36,19 +36,13 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         ((FloraCategoryViewHolder)holder).mTitle.setText(mFloraCategories.get(position).getName());
 
-        Picasso.get()
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
+
+        Glide.with(holder.itemView.getContext())
+                .setDefaultRequestOptions(requestOptions)
                 .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
-                .placeholder(R.drawable.aff_logo_grey)
-                .error(R.drawable.aff_logo_grey)
                 .into(((FloraCategoryViewHolder)holder).mImage);
-
-//        RequestOptions requestOptions = new RequestOptions()
-//                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
-
-//        Glide.with(holder.itemView.getContext())
-//                .setDefaultRequestOptions(requestOptions)
-//                .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
-//                .into(((FloraCategoryViewHolder)holder).mImage);
 
     }
 

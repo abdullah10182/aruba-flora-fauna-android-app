@@ -14,16 +14,18 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardBackgroundColor="@color/extra_light_grey"
             app:cardCornerRadius="20dp"
-            app:cardElevation="1dp">
+            app:cardElevation="3dp">
 
             <LinearLayout
-                android:padding="8dp"
+                android:layout_margin="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     app:cardCornerRadius="15dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -40,6 +42,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -51,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:text="Long text test"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_opaque_transparent"
                         android:textSize="@dimen/flora_species_list_title_text_size"
                         android:textStyle="bold" />
 
