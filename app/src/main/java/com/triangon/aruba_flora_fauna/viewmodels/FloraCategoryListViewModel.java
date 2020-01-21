@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModel;
 public class FloraCategoryListViewModel extends ViewModel {
 
     private FloraCategoryRepository mFloraCategoryRepository;
+    private boolean mDidRetrieveCategories;
 
     public FloraCategoryListViewModel() {
         mFloraCategoryRepository = FloraCategoryRepository.getInstance();
         mFloraCategoryRepository.getFloraCategoriesApi();
+        mDidRetrieveCategories = false;
     }
 
     public LiveData<List<FloraCategory>> getFloraCategories() {
@@ -23,5 +25,17 @@ public class FloraCategoryListViewModel extends ViewModel {
 
     public void getFloraCategoriesApi() {
         mFloraCategoryRepository.getFloraCategoriesApi();
+    }
+
+    public LiveData<Boolean> isCategoryRequestTimedOut() {
+        return mFloraCategoryRepository.isCategoryRequestTimedOut();
+    }
+
+    public boolean isDidRetrieveCategories() {
+        return mDidRetrieveCategories;
+    }
+
+    public void setDidRetrieveCategories(boolean didRetrieveCategories) {
+        this.mDidRetrieveCategories = didRetrieveCategories;
     }
 }

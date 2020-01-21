@@ -46,5 +46,13 @@ public class FloraSpeciesRepository {
         mFloraSpeciesApiClient.resetFloraSpecies();
     }
 
+    public LiveData<Boolean> isSpeciesRequestTimedOut() {
+        return mFloraSpeciesApiClient.isSpeciesRequestTimedOut();
+    }
+
+    public void cancelRequest() {
+        mFloraSpeciesSuggestionsApiClient.cancelRequest();
+    }
+
 
 }

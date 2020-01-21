@@ -27,6 +27,7 @@ public class FloraSpeciesApiClient {
     private MutableLiveData<List<FloraSpecies>> mFloraSpeciesSuggestions;
     private RetrieveFloraSpeciesRunnable mRetrieveFloraSpeciesRunnable;
     private RetrieveFloraSpeciesSuggestionsRunnable mRetrieveFloraSpeciesSuggestionsRunnable;
+    private MutableLiveData<Boolean> mSpeciesRequestTimeout = new MutableLiveData<>();
 
     public static FloraSpeciesApiClient getInstance() {
         if(instance == null) {
@@ -49,10 +50,13 @@ public class FloraSpeciesApiClient {
         return mFloraSpeciesSuggestions;
     }
 
+    public LiveData<Boolean> isSpeciesRequestTimedOut() {
+        return mSpeciesRequestTimeout;
+    }
+
     public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
-        if(mRetrieveFloraSpeciesRunnable != null) {
+        if(mRetrieveFloraSpeciesRunnable != null)
             mRetrieveFloraSpeciesRunnable = null;
-        }
 
         mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId, searchQuery);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
@@ -60,7 +64,7 @@ public class FloraSpeciesApiClient {
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
             public void run() {
-                //let user know call timed out
+                mSpeciesRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -77,7 +81,7 @@ public class FloraSpeciesApiClient {
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
             public void run() {
-                //let user know call timed out
+                //mSpeciesRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -122,7 +126,14 @@ public class FloraSpeciesApiClient {
         }
 
         private void cancelRequest() {
+            cancelRequest = true;
             Log.d(TAG, "cancelRequest: canceling search request");
+        }
+    }
+
+    public void cancelRequest() {
+        if(mRetrieveFloraSpeciesRunnable != null) {
+            mRetrieveFloraSpeciesRunnable.cancelRequest = true;
         }
     }
 

@@ -14,9 +14,13 @@ public class FloraSpeciesListViewModel extends ViewModel {
     private String mSelectedFloraCategory;
     private String mSelectedFloraId;
     private String mSelectedSearchQuery;
+    private boolean mDidRetrieveSpecies;
+    private boolean mIsPerformingQuery;
 
     public FloraSpeciesListViewModel(){
         mFloraSpeciesRepository = FloraSpeciesRepository.getInstance();
+        mDidRetrieveSpecies = false;
+        mIsPerformingQuery = false;
     }
 
     public LiveData<List<FloraSpecies>> getFloraSpecies() {
@@ -27,6 +31,7 @@ public class FloraSpeciesListViewModel extends ViewModel {
         mSelectedFloraCategory = category;
         mSelectedFloraId = speciesId;
         mSelectedSearchQuery = searchQuery;
+        mIsPerformingQuery = true;
         mFloraSpeciesRepository.getFloraSpeciesApi(category, speciesId, searchQuery);
     }
 
@@ -45,4 +50,29 @@ public class FloraSpeciesListViewModel extends ViewModel {
     public void resetFloraSpecies() {
         this.mFloraSpeciesRepository.resetFloraSpecies();
     }
+
+    public LiveData<Boolean> isSpeciesRequestTimedOut() {
+        return mFloraSpeciesRepository.isSpeciesRequestTimedOut();
+    }
+
+    public boolean isDidRetrieveSpecies() {
+        return mDidRetrieveSpecies;
+    }
+
+    public void setDidRetrieveSpecies(boolean didRetrieveSpecies) {
+        this.mDidRetrieveSpecies = didRetrieveSpecies;
+    }
+
+    public boolean isIsPerformingQuery() {
+        return mIsPerformingQuery;
+    }
+
+    public void setIsPerformingQuery(boolean isPerformingQuery) {
+        this.mIsPerformingQuery = isPerformingQuery;
+    }
+
+    public void cancelRequest() {
+        mFloraSpeciesRepository.cancelRequest();
+    }
+
 }

@@ -5,6 +5,8 @@ import com.triangon.aruba_flora_fauna.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
@@ -35,6 +37,10 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
     private String mSelectedCategoryName;
     private String mSearchQuery;
     private Toolbar mToolbar;
+    @BindView(R.id.fl_error_screen)
+    public FrameLayout mErrorScreen;
+    @BindView(R.id.btn_retry_call)
+    public Button mRetryCallButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,20 +56,35 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
 
         initRecyclerView();
         subscribeObservers();
-        showProgressBar(true);
-        initSpeciesList();
+        showErrorScreen(false);
+        //showProgressBar(true);
+        getSpeciesList();
+        initClickHandlerRetryButton();
+
+    }
+
+    private void initClickHandlerRetryButton() {
+        mRetryCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showErrorScreen(false);
+                getSpeciesList();
+            }
+        });
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
 
-        showProgressBar(true);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        initSpeciesList();
+        //showProgressBar(true);
+        //mRecyclerView.setVisibility(View.INVISIBLE);
+       // getSpeciesList();
     }
 
-    private void initSpeciesList() {
+    private void getSpeciesList() {
+        showProgressBar(true);
+        mFloraSpeciesListViewModel.setDidRetrieveSpecies(false);
         if(mSelectedCategory != null && mSelectedCategoryName != null) {
             initToolbar(mSelectedCategoryName);
             mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
@@ -81,13 +102,14 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
     }
 
     private void subscribeObservers() {
-        showProgressBar(true);
         mRecyclerView.setVisibility(View.INVISIBLE);
         mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
             @Override
             public void onChanged(List<FloraSpecies> floraSpecies) {
                 if(floraSpecies != null && floraSpecies.size() > 0) {
                     mAdapter.setFloraSpecies(floraSpecies);
+                    mFloraSpeciesListViewModel.setDidRetrieveSpecies(true);
+                    mFloraSpeciesListViewModel.setIsPerformingQuery(false);
                     if(mSelectedCategory != null && mFloraSpeciesListViewModel.getSelectedFloraCategory().equals(floraSpecies.get(0).getCategoryId())){
                         mRecyclerView.setVisibility(View.VISIBLE);
                         showProgressBar(false);
@@ -105,6 +127,16 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                 }
             }
         });
+
+//        mFloraSpeciesListViewModel.isSpeciesRequestTimedOut().observe(this, new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean aBoolean) {
+//                if( aBoolean && !mFloraSpeciesListViewModel.isDidRetrieveSpecies()) {
+//                    showProgressBar(false);
+//                    showErrorScreen(true);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -125,5 +157,14 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    public void showErrorScreen(Boolean show){
+        if(show) {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            mErrorScreen.setVisibility(View.VISIBLE);
+        } else {
+            mErrorScreen.setVisibility(View.GONE);
+        }
     }
 }

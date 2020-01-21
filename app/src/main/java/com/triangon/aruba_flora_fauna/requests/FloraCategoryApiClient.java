@@ -22,10 +22,10 @@ import static com.triangon.aruba_flora_fauna.utils.Constants.NETWORK_TIMEOUT;
 public class FloraCategoryApiClient {
 
     private static final String TAG = "CategoryApiClientApi";
-
     private static FloraCategoryApiClient instance;
     private MutableLiveData<List<FloraCategory>> mFloraCategories;
     private RetrieveFloraCategoriesRunnable mRetrieveFloraCategoriesRunnable;
+    private MutableLiveData<Boolean> mCategoryRequestTimeout = new MutableLiveData<>();
 
     public static FloraCategoryApiClient getInstance() {
         if(instance == null) {
@@ -42,6 +42,10 @@ public class FloraCategoryApiClient {
         return mFloraCategories;
     }
 
+    public LiveData<Boolean> isCategoryRequestTimedOut() {
+        return mCategoryRequestTimeout;
+    }
+
     public void getFloraCategoriesApi() {
         if(mRetrieveFloraCategoriesRunnable != null) {
              mRetrieveFloraCategoriesRunnable = null;
@@ -52,7 +56,7 @@ public class FloraCategoryApiClient {
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
             public void run() {
-                //let user know call timed out
+                mCategoryRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);

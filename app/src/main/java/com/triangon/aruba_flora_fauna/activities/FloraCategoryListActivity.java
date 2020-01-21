@@ -19,7 +19,10 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -50,6 +53,10 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     public Toolbar mToolbar;
     @BindView(R.id.iv_search_circle_bg)
     public ImageView mSearchIconCircleBg;
+    @BindView(R.id.fl_error_screen)
+    public FrameLayout mErrorScreen;
+    @BindView(R.id.btn_retry_call)
+    public Button mRetryCallButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +78,44 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
         initSearchButton();
 
+        initClickHandlerRetryButton();
+
+    }
+
+    private void initClickHandlerRetryButton() {
+        mRetryCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showErrorScreen(false);
+                getFloraCategoriesApi();
+            }
+        });
     }
 
     private void getFloraCategoriesApi() {
+        showProgressBar(true);
         mFloraCategoryListViewModel.getFloraCategoriesApi();
     }
 
     private void subscribeObservers() {
-        showProgressBar(true);
         mFloraCategoryListViewModel.getFloraCategories().observe(this, new Observer<List<FloraCategory>>() {
             @Override
             public void onChanged(List<FloraCategory> floraCategories) {
                 if(floraCategories != null) {
                     mAdapter.setFloraCategories(floraCategories);
+                    mRecyclerView.setVisibility(View.VISIBLE);
                     showProgressBar(false);
+                    mFloraCategoryListViewModel.setDidRetrieveCategories(true);
+                }
+            }
+        });
+
+        mFloraCategoryListViewModel.isCategoryRequestTimedOut().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if( aBoolean && !mFloraCategoryListViewModel.isDidRetrieveCategories()) {
+                    showProgressBar(false);
+                    showErrorScreen(true);
                 }
             }
         });
@@ -172,6 +203,15 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                 openSearch();
             }
         });
+    }
+
+    public void showErrorScreen(Boolean show){
+        if(show) {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            mErrorScreen.setVisibility(View.VISIBLE);
+        } else {
+            mErrorScreen.setVisibility(View.GONE);
+        }
     }
 
 }

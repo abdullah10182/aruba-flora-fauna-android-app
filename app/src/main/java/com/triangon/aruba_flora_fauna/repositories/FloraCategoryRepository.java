@@ -31,4 +31,8 @@ public class FloraCategoryRepository {
         mFloraCategoryApiClient.getFloraCategoriesApi();
    }
 
+    public LiveData<Boolean> isCategoryRequestTimedOut() {
+        return mFloraCategoryApiClient.isCategoryRequestTimedOut();
+    }
+
 }
