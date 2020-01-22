@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.squareup.picasso.Picasso;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 

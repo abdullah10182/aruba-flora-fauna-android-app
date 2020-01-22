@@ -1,6 +1,7 @@
 package com.triangon.aruba_flora_fauna.persistence;
 
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
+import com.triangon.aruba_flora_fauna.models.ImageBundle;
 
 import java.util.List;
 

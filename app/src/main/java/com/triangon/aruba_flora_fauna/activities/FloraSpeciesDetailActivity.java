@@ -31,7 +31,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 
 import com.bumptech.glide.request.target.Target;
-import com.squareup.picasso.Picasso;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.listeners.OnImageChangeListener;

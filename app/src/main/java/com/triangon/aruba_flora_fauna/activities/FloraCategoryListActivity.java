@@ -33,6 +33,7 @@ import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
+import com.triangon.aruba_flora_fauna.utils.Resource;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
 import java.util.List;
@@ -95,9 +96,23 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private void getFloraCategoriesApi() {
         showProgressBar(true);
         //mFloraCategoryListViewModel.getFloraCategoriesApi();
+        mFloraCategoryListViewModel.getFloraCategories();
     }
 
     private void subscribeObservers() {
+        mFloraCategoryListViewModel.getFloraCategories().observe(this, new Observer<Resource<List<FloraCategory>>>() {
+            @Override
+            public void onChanged(Resource<List<FloraCategory>> listResource) {
+                if(listResource != null) {
+                    Log.d(TAG, "onChanged: status" + listResource.status);
+
+                    if(listResource.data != null) {
+                        System.out.println(listResource.data );
+                    }
+                }
+            }
+        });
+
         mFloraCategoryListViewModel.getViewState().observe(this, new Observer<FloraCategoryListViewModel.ViewState>() {
             @Override
             public void onChanged(FloraCategoryListViewModel.ViewState viewState) {
@@ -114,7 +129,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     }
 
     private void displayFloraCategories() {
-        mAdapter.displayFloraCategories();
+        //mAdapter.displayFloraCategories();
     }
 
     private void initRecyclerView() {
