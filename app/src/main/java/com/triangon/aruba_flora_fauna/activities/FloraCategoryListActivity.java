@@ -94,31 +94,27 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
     private void getFloraCategoriesApi() {
         showProgressBar(true);
-        mFloraCategoryListViewModel.getFloraCategoriesApi();
+        //mFloraCategoryListViewModel.getFloraCategoriesApi();
     }
 
     private void subscribeObservers() {
-        mFloraCategoryListViewModel.getFloraCategories().observe(this, new Observer<List<FloraCategory>>() {
+        mFloraCategoryListViewModel.getViewState().observe(this, new Observer<FloraCategoryListViewModel.ViewState>() {
             @Override
-            public void onChanged(List<FloraCategory> floraCategories) {
-                if(floraCategories != null) {
-                    mAdapter.setFloraCategories(floraCategories);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    showProgressBar(false);
-                    mFloraCategoryListViewModel.setDidRetrieveCategories(true);
+            public void onChanged(FloraCategoryListViewModel.ViewState viewState) {
+                if(viewState != null) {
+                    switch (viewState){
+                        case FLORA_CATEGORIES: {
+                            displayFloraCategories();
+                            break;
+                        }
+                    }
                 }
             }
         });
+    }
 
-        mFloraCategoryListViewModel.isCategoryRequestTimedOut().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if( aBoolean && !mFloraCategoryListViewModel.isDidRetrieveCategories()) {
-                    showProgressBar(false);
-                    showErrorScreen(true);
-                }
-            }
-        });
+    private void displayFloraCategories() {
+        mAdapter.displayFloraCategories();
     }
 
     private void initRecyclerView() {

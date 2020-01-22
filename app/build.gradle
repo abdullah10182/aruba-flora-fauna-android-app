@@ -28,6 +28,7 @@ dependencies {
     def lifecycle_version = "2.1.0"
     def supportVersion = "1.1.0"
     def glideVersion = "4.11.0"
+    def room_version = "2.2.3"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$supportVersion"
@@ -70,8 +71,10 @@ dependencies {
     //stfalcon image viewer
     implementation "com.github.stfalcon:stfalcon-imageviewer:0.1.0"
 
-    //picasoo
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    //room
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
 
 
 }

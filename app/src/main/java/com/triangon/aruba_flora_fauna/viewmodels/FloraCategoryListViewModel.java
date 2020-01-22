@@ -1,41 +1,32 @@
 package com.triangon.aruba_flora_fauna.viewmodels;
 
-import com.triangon.aruba_flora_fauna.models.FloraCategory;
-import com.triangon.aruba_flora_fauna.repositories.FloraCategoryRepository;
+import android.app.Application;
 
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+public class FloraCategoryListViewModel extends AndroidViewModel {
 
-public class FloraCategoryListViewModel extends ViewModel {
+    private static final String TAG = "CategoryListViewModel";
 
-    private FloraCategoryRepository mFloraCategoryRepository;
-    private boolean mDidRetrieveCategories;
+    public enum ViewState {FLORA_CATEGORIES};
+    private MutableLiveData<ViewState> viewState;
 
-    public FloraCategoryListViewModel() {
-        mFloraCategoryRepository = FloraCategoryRepository.getInstance();
-        mFloraCategoryRepository.getFloraCategoriesApi();
-        mDidRetrieveCategories = false;
+    public FloraCategoryListViewModel(@NonNull Application application) {
+        super(application);
+
+        init();
     }
 
-    public LiveData<List<FloraCategory>> getFloraCategories() {
-        return mFloraCategoryRepository.getFloraCategories();
+    private void init() {
+        if(viewState == null) {
+            viewState = new MutableLiveData<>();
+            viewState.setValue(ViewState.FLORA_CATEGORIES);
+        }
     }
 
-    public void getFloraCategoriesApi() {
-        mFloraCategoryRepository.getFloraCategoriesApi();
-    }
-
-    public LiveData<Boolean> isCategoryRequestTimedOut() {
-        return mFloraCategoryRepository.isCategoryRequestTimedOut();
-    }
-
-    public boolean isDidRetrieveCategories() {
-        return mDidRetrieveCategories;
-    }
-
-    public void setDidRetrieveCategories(boolean didRetrieveCategories) {
-        this.mDidRetrieveCategories = didRetrieveCategories;
+    public MutableLiveData<ViewState> getViewState() {
+        return viewState;
     }
 }

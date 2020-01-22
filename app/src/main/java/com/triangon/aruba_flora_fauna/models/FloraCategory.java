@@ -5,28 +5,40 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "flora_categories")
 public class FloraCategory implements Parcelable {
+
+    @PrimaryKey
+    @NonNull
     private String id;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "description")
     private String description;
+
+    @ColumnInfo(name = "category_image")
     @SerializedName("category_image")
     private ImageBundle categoryImage;
 
-    public FloraCategory(String id, String name, String description, ImageBundle categoryImage) {
+    @ColumnInfo(name = "timestamp")
+    private int timestamp;
+
+    public FloraCategory(@NonNull String id, String name, String description, ImageBundle categoryImage, int timestamp) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.categoryImage = categoryImage;
+        this.timestamp = timestamp;
     }
 
     public FloraCategory() {
-    }
-
-    protected FloraCategory(Parcel in) {
-        id = in.readString();
-        name = in.readString();
-        description = in.readString();
-        categoryImage = in.readParcelable(ImageBundle.class.getClassLoader());
     }
 
     public static final Creator<FloraCategory> CREATOR = new Creator<FloraCategory>() {
@@ -73,9 +85,25 @@ public class FloraCategory implements Parcelable {
         this.categoryImage = categoryImage;
     }
 
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    protected FloraCategory(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        description = in.readString();
+        categoryImage = in.readParcelable(ImageBundle.class.getClassLoader());
+        timestamp = in.readInt();
     }
 
     @Override
@@ -84,5 +112,17 @@ public class FloraCategory implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(description);
         parcel.writeParcelable(categoryImage, i);
+        parcel.writeInt(timestamp);
+    }
+
+    @Override
+    public String toString() {
+        return "FloraCategory{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", categoryImage=" + categoryImage +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }
