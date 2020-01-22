@@ -24,7 +24,7 @@ public interface FloraCategoryDao {
 
     @Query("UPDATE flora_categories set name = :name, description = :description, category_image = :category_image " +
             "WHERE id = :id")
-    void updateFloraCategory(String id, String name, String description, String category_image);
+    void updateFloraCategory(String id, String name, String description, ImageBundle category_image);
 
 //    @Query("SELECT * FROM flora_categories WHERE name LIKE '%' || :query || '%' OR description LIKE '%' || '%' " +
 //        "ORDER BY name DESC")

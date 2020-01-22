@@ -96,7 +96,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     private void getFloraCategoriesApi() {
         showProgressBar(true);
         //mFloraCategoryListViewModel.getFloraCategoriesApi();
-        mFloraCategoryListViewModel.getFloraCategories();
+        mFloraCategoryListViewModel.getFloraCategoriesApi(/*params*/);
     }
 
     private void subscribeObservers() {
@@ -107,7 +107,10 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                     Log.d(TAG, "onChanged: status" + listResource.status);
 
                     if(listResource.data != null) {
-                        System.out.println(listResource.data );
+                        System.out.println("test+" + listResource.data );
+                        mAdapter.setFloraCategories(listResource.data);
+                        showProgressBar(false);
+                        mRecyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }

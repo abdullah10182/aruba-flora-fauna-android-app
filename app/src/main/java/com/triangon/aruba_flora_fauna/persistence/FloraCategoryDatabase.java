@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = FloraCategory.class, version = 1)
+@Database(entities = FloraCategory.class, version = 1, exportSchema = false)
 @TypeConverters({Convertors.class})
 public abstract class FloraCategoryDatabase extends RoomDatabase {
 
@@ -19,9 +19,13 @@ public abstract class FloraCategoryDatabase extends RoomDatabase {
 
     public static FloraCategoryDatabase getInstance(final Context context ) {
         if(instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(), FloraCategoryDatabase.class, DATABASE_NAME).build();
+            instance = Room.databaseBuilder(
+                    context.getApplicationContext(),
+                    FloraCategoryDatabase.class,
+                    DATABASE_NAME
+            ).build();
         }
-        return null;
+        return instance;
     }
 
     public abstract FloraCategoryDao getFloraCategoryDao();

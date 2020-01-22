@@ -35,11 +35,11 @@ public class FloraSpeciesRepository {
     }
 
     public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
-        mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId, searchQuery);
+       // mFloraSpeciesApiClient.getFloraSpeciesApi(category, speciesId, searchQuery);
     }
 
     public void getFloraSpeciesSuggestionsApi(String sortBy) {
-        mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi(sortBy);
+        //mFloraSpeciesSuggestionsApiClient.getFloraSpeciesSuggestionsApi(sortBy);
     }
 
     public void resetFloraSpecies() {

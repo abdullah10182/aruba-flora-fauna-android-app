@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "flora_categories")
@@ -38,6 +39,7 @@ public class FloraCategory implements Parcelable {
         this.timestamp = timestamp;
     }
 
+    @Ignore
     public FloraCategory() {
     }
 

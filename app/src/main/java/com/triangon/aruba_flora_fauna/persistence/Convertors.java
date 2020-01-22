@@ -2,6 +2,7 @@ package com.triangon.aruba_flora_fauna.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.triangon.aruba_flora_fauna.models.ImageBundle;
 
 import java.lang.reflect.Type;
 
@@ -19,6 +20,19 @@ public class Convertors {
     public static String fromArrayList(String[] list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
+        return json;
+    }
+
+    @TypeConverter
+    public static ImageBundle imageBundleFromString(String value) {
+        Type listType = new TypeToken<ImageBundle>(){}.getType();
+        return new Gson().fromJson(value, listType);
+    }
+
+    @TypeConverter
+    public static String fromImageBundle(ImageBundle imageBundle) {
+        Gson gson = new Gson();
+        String json = gson.toJson(imageBundle);
         return json;
     }
 }

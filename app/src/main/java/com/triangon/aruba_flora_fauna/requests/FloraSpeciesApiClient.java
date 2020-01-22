@@ -54,38 +54,38 @@ public class FloraSpeciesApiClient {
         return mSpeciesRequestTimeout;
     }
 
-    public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
-        if(mRetrieveFloraSpeciesRunnable != null)
-            mRetrieveFloraSpeciesRunnable = null;
+//    public void getFloraSpeciesApi(String category, String speciesId, String searchQuery) {
+//        if(mRetrieveFloraSpeciesRunnable != null)
+//            mRetrieveFloraSpeciesRunnable = null;
+//
+//        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId, searchQuery);
+//        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
+//
+//        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSpeciesRequestTimeout.postValue(true);
+//                handler.cancel(true);
+//            }
+//        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
+//    }
 
-        mRetrieveFloraSpeciesRunnable = new RetrieveFloraSpeciesRunnable(category, speciesId, searchQuery);
-        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesRunnable);
-
-        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
-            @Override
-            public void run() {
-                mSpeciesRequestTimeout.postValue(true);
-                handler.cancel(true);
-            }
-        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
-    }
-
-    public void getFloraSpeciesSuggestionsApi(String sortBy) {
-        if(mRetrieveFloraSpeciesSuggestionsRunnable != null) {
-            mRetrieveFloraSpeciesSuggestionsRunnable = null;
-        }
-
-        mRetrieveFloraSpeciesSuggestionsRunnable = new RetrieveFloraSpeciesSuggestionsRunnable(sortBy);
-        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesSuggestionsRunnable);
-
-        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
-            @Override
-            public void run() {
-                //mSpeciesRequestTimeout.postValue(true);
-                handler.cancel(true);
-            }
-        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
-    }
+//    public void getFloraSpeciesSuggestionsApi(String sortBy) {
+//        if(mRetrieveFloraSpeciesSuggestionsRunnable != null) {
+//            mRetrieveFloraSpeciesSuggestionsRunnable = null;
+//        }
+//
+//        mRetrieveFloraSpeciesSuggestionsRunnable = new RetrieveFloraSpeciesSuggestionsRunnable(sortBy);
+//        final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveFloraSpeciesSuggestionsRunnable);
+//
+//        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+//            @Override
+//            public void run() {
+//                //mSpeciesRequestTimeout.postValue(true);
+//                handler.cancel(true);
+//            }
+//        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
+//    }
 
     public class RetrieveFloraSpeciesRunnable implements Runnable {
 

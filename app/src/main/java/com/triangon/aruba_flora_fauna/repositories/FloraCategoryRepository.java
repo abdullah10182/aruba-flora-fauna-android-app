@@ -30,7 +30,6 @@ public class FloraCategoryRepository {
         if(instance == null) {
             instance = new FloraCategoryRepository(context);
         }
-
         return instance;
     }
 
@@ -54,7 +53,7 @@ public class FloraCategoryRepository {
                                     floraCategories[index].getId(),
                                     floraCategories[index].getName(),
                                     floraCategories[index].getDescription(),
-                                    floraCategories[index].getCategoryImage().getImageThumbnail()
+                                    floraCategories[index].getCategoryImage()
                             );
                         }
                         index++;
@@ -64,7 +63,7 @@ public class FloraCategoryRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<FloraCategory> data) {
-                return false;
+                return true; // always query the network for now TEMP
             }
 
             @NonNull
