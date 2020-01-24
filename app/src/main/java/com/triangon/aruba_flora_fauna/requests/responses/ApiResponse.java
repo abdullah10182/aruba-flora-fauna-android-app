@@ -1,6 +1,8 @@
 package com.triangon.aruba_flora_fauna.requests.responses;
 
 
+import com.triangon.aruba_flora_fauna.models.FloraCategory;
+
 import java.io.IOException;
 
 import retrofit2.Response;

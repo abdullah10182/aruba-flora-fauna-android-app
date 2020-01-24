@@ -1,5 +1,6 @@
 package com.triangon.aruba_flora_fauna.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -7,6 +8,7 @@ import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +27,13 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.google.android.material.appbar.AppBarLayout;
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.R;
@@ -37,6 +45,8 @@ import com.triangon.aruba_flora_fauna.utils.Resource;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
 import java.util.List;
+
+import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.QUERY_EXHAUSTED;
 
 public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
 
@@ -107,10 +117,33 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                     Log.d(TAG, "onChanged: status" + listResource.status);
 
                     if(listResource.data != null) {
-                        System.out.println("test+" + listResource.data );
-                        mAdapter.setFloraCategories(listResource.data);
-                        showProgressBar(false);
-                        mRecyclerView.setVisibility(View.VISIBLE);
+                        switch (listResource.status) {
+                            case LOADING: {
+                                //mAdapter.displayOnlyLoading();
+                                showProgressBar(true);
+                            }
+                            case SUCCESS: {
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #categories: " + listResource.data.size());
+                                //mAdapter.hideLoading();
+                                showProgressBar(false);
+                                mAdapter.setFloraCategories(listResource.data);
+                                break;
+                            }
+                            case ERROR: {
+                                Log.e(TAG, "onChanged: cannot refresh cache.");
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
+                                Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
+                                mAdapter.hideLoading();
+                                mAdapter.setFloraCategories(listResource.data);
+                                Toast.makeText(FloraCategoryListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                if(listResource.message.equals(QUERY_EXHAUSTED)){
+                                    mAdapter.setQueryExhausted();
+                                    showErrorScreen(true);
+                                }
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -135,13 +168,34 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         //mAdapter.displayFloraCategories();
     }
 
+    private RequestManager initGlide() {
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey);
+        return Glide.with(this)
+                .setDefaultRequestOptions(options);
+
+    }
+
     private void initRecyclerView() {
         int columnCount = 2;
-        mAdapter = new FloraCategoryRecyclerAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
+        mAdapter = new FloraCategoryRecyclerAdapter(this, initGlide(), viewPreloader);
+
+        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<String>(
+                Glide.with(this),
+                mAdapter,
+                viewPreloader,
+                20);
+
+        mRecyclerView.addOnScrollListener(preloader);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),columnCount);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -225,6 +279,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
             mErrorScreen.setVisibility(View.VISIBLE);
         } else {
             mErrorScreen.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 

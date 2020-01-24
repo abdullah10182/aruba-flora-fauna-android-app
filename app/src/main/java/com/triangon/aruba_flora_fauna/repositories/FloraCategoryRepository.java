@@ -11,6 +11,7 @@ import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
 import com.triangon.aruba_flora_fauna.requests.executors.AppExecutors;
 import com.triangon.aruba_flora_fauna.requests.responses.ApiResponse;
 import com.triangon.aruba_flora_fauna.requests.responses.FloraCategoryListResponse;
+import com.triangon.aruba_flora_fauna.utils.Constants;
 import com.triangon.aruba_flora_fauna.utils.NetworkBoundResource;
 import com.triangon.aruba_flora_fauna.utils.Resource;
 
@@ -49,12 +50,14 @@ public class FloraCategoryRepository {
                         if(rowid == -1) {
                             Log.d(TAG, "saveCallResult: this is cat is already in cache");
                             // if already exists, I don't want to set the category or timestamp b/c they will be erased
-                            floraCategoryDao.updateFloraCategory(
-                                    floraCategories[index].getId(),
-                                    floraCategories[index].getName(),
-                                    floraCategories[index].getDescription(),
-                                    floraCategories[index].getCategoryImage()
-                            );
+                            floraCategories[index].setTimestamp((int) (System.currentTimeMillis() / 1000));
+                            floraCategoryDao.insertFloraCategories(floraCategories[index]);
+//                            floraCategoryDao.updateFloraCategory(
+//                                    floraCategories[index].getId(),
+//                                    floraCategories[index].getName(),
+//                                    floraCategories[index].getDescription(),
+//                                    floraCategories[index].getCategoryImage()
+//                            );
                         }
                         index++;
                     }
@@ -63,7 +66,21 @@ public class FloraCategoryRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<FloraCategory> data) {
-                return true; // always query the network for now TEMP
+                //return true; // always query the network for now TEMP
+                int currentTime = (int) (System.currentTimeMillis() / 1000);
+                int lastRefresh = 0;
+                if(data.size() > 0){
+                    lastRefresh = data.get(0).getTimestamp();
+                } else {
+                    return true;
+                }
+
+                if((currentTime - lastRefresh) >= 60){
+                    Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
+                    return true;
+                }
+                Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + false);
+                return false;
             }
 
             @NonNull
@@ -79,4 +96,5 @@ public class FloraCategoryRepository {
             }
         }.getAsLiveData();
     }
+
 }

@@ -1,47 +1,61 @@
 package com.triangon.aruba_flora_fauna.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements ListPreloader.PreloadModelProvider<String> {
+
+    private static final int LOADING_TYPE = 1;
+    private static final int CATEGORY_TYPE = 2;
+    private static final int EXHAUSTED_TYPE = 3;
 
     private List<FloraCategory> mFloraCategories;
     private OnFloraCategoryListener mOnFloraCategoryListener;
+    private RequestManager requestManager;
+    private ViewPreloadSizeProvider<String> preloadSizeProvider;
 
-    public FloraCategoryRecyclerAdapter(OnFloraCategoryListener mOnFloraCategoryListener) {
+    public FloraCategoryRecyclerAdapter(OnFloraCategoryListener mOnFloraCategoryListener,
+                                        RequestManager requestManager,
+                                        ViewPreloadSizeProvider<String> viewPreloadSizeProvider) {
         this.mOnFloraCategoryListener = mOnFloraCategoryListener;
+        this.requestManager = requestManager;
+        this.preloadSizeProvider = viewPreloadSizeProvider;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_flora_category_list_item, parent, false);
-        return new FloraCategoryViewHolder(view, mOnFloraCategoryListener);
+        return new FloraCategoryViewHolder(view, mOnFloraCategoryListener, requestManager, preloadSizeProvider);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        ((FloraCategoryViewHolder)holder).mTitle.setText(mFloraCategories.get(position).getName());
+        int itemViewType = getItemViewType(position);
 
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
-
-        Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(requestOptions)
-                .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
-                .into(((FloraCategoryViewHolder)holder).mImage);
+        if(itemViewType == CATEGORY_TYPE) {
+            ((FloraCategoryViewHolder)holder).onBind(mFloraCategories.get(position));
+        }
+        //TODO else itemViewType == other type to reuse recycle view
 
     }
 
@@ -54,6 +68,20 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         return 0;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(mFloraCategories.get(position).getCategoryImage() != null){
+            return CATEGORY_TYPE;
+        }
+        else if(mFloraCategories.get(position).getName().equals("LOADING...")){
+            return LOADING_TYPE;
+        }
+//        else if(mFloraCategories.get(position).getName().equals("EXHAUSTED...")) {
+//            return EXHAUSTED_TYPE;
+//        }
+        else return EXHAUSTED_TYPE;
+    }
+
     public void setFloraCategories(List<FloraCategory> floraCategories) {
         mFloraCategories = floraCategories;
         notifyDataSetChanged();
@@ -61,5 +89,68 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     public List<FloraCategory> getFloraCategories() {
         return mFloraCategories;
+    }
+
+    public void displayOnlyLoading(){
+        clearRecipesList();
+        FloraCategory floraCategory = new FloraCategory();
+        floraCategory.setName("LOADING...");
+        mFloraCategories.add(floraCategory);
+        notifyDataSetChanged();
+    }
+
+
+    private void clearRecipesList(){
+        if(mFloraCategories == null){
+            mFloraCategories = new ArrayList<>();
+        }
+        else {
+            mFloraCategories.clear();
+        }
+        notifyDataSetChanged();
+    }
+
+    private boolean isLoading(){
+        if(mFloraCategories != null){
+            if(mFloraCategories.size() > 0){
+                if(mFloraCategories.get(mFloraCategories.size() - 1).getName().equals("LOADING...")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void hideLoading(){
+        if(isLoading()) {
+            if (mFloraCategories.get(0).getName().equals("LOADING...")) {
+                mFloraCategories.remove(mFloraCategories.size() - 1);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setQueryExhausted(){
+        hideLoading();
+        FloraCategory exhaustedRecipe = new FloraCategory();
+        exhaustedRecipe.setName("EXHAUSTED...");
+        mFloraCategories.add(exhaustedRecipe);
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public List<String> getPreloadItems(int position) {
+        String url = mFloraCategories.get(position).getCategoryImage().getImageThumbnail();
+        if(TextUtils.isEmpty(url)){
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(url);
+    }
+
+    @Nullable
+    @Override
+    public RequestBuilder<?> getPreloadRequestBuilder(@NonNull String item) {
+        return requestManager.load(item) ;
     }
 }

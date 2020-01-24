@@ -16,6 +16,14 @@ public class FloraCategoryListResponse {
     @Expose()
     private List<FloraCategory> floraCategories;
 
+    @SerializedName("error")
+    @Expose()
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
     public int getCount() {
         return count;
     }
@@ -29,6 +37,7 @@ public class FloraCategoryListResponse {
         return "FloraCategoryListResponse{" +
                 "count=" + count +
                 ", floraCategories=" + floraCategories +
+                ", error='" + error + '\'' +
                 '}';
     }
 }

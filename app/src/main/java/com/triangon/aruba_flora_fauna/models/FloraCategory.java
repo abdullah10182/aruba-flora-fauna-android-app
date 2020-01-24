@@ -28,14 +28,18 @@ public class FloraCategory implements Parcelable {
     @SerializedName("category_image")
     private ImageBundle categoryImage;
 
+    @ColumnInfo(name = "weight")
+    private String weight;
+
     @ColumnInfo(name = "timestamp")
     private int timestamp;
 
-    public FloraCategory(@NonNull String id, String name, String description, ImageBundle categoryImage, int timestamp) {
+    public FloraCategory(@NonNull String id, String name, String description, ImageBundle categoryImage, String weight, int timestamp) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.categoryImage = categoryImage;
+        this.weight = weight;
         this.timestamp = timestamp;
     }
 
@@ -95,6 +99,14 @@ public class FloraCategory implements Parcelable {
         this.timestamp = timestamp;
     }
 
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -105,6 +117,7 @@ public class FloraCategory implements Parcelable {
         name = in.readString();
         description = in.readString();
         categoryImage = in.readParcelable(ImageBundle.class.getClassLoader());
+        weight = in.readString();
         timestamp = in.readInt();
     }
 
@@ -114,6 +127,7 @@ public class FloraCategory implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(description);
         parcel.writeParcelable(categoryImage, i);
+        parcel.writeString(weight);
         parcel.writeInt(timestamp);
     }
 
@@ -124,6 +138,7 @@ public class FloraCategory implements Parcelable {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", categoryImage=" + categoryImage +
+                ", weight='" + weight + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }

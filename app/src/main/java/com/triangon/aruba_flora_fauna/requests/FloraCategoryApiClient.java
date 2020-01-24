@@ -14,10 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import retrofit2.Call;
-import retrofit2.Response;
 
-import static com.triangon.aruba_flora_fauna.utils.Constants.NETWORK_TIMEOUT;
 
 public class FloraCategoryApiClient {
 

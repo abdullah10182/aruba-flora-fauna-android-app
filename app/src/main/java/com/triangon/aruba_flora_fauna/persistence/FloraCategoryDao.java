@@ -30,7 +30,7 @@ public interface FloraCategoryDao {
 //        "ORDER BY name DESC")
 //    LiveData<List<FloraCategory>> searchFloraCategories(String query);
 
-    @Query("SELECT * FROM flora_categories ORDER BY name DESC")
+    @Query("SELECT * FROM flora_categories ORDER BY weight ASC")
     LiveData<List<FloraCategory>> getFloraCategories();
 
 

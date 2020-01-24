@@ -1,6 +1,7 @@
 package com.triangon.aruba_flora_fauna.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.repositories.FloraCategoryRepository;
@@ -22,6 +23,16 @@ public class FloraCategoryListViewModel extends AndroidViewModel {
     public enum ViewState {FLORA_CATEGORIES};
     private MutableLiveData<ViewState> viewState;
     private MediatorLiveData<Resource<List<FloraCategory>>> floraCategories = new MediatorLiveData<>();
+
+    //query extras
+    private boolean isQueryExhausted;
+    //private String query;
+    //private int pageNumber;
+    private boolean isPerformingQuery;
+    private boolean cancelRequest;
+    private long requestStartTime;
+
+    public static final String QUERY_EXHAUSTED = "No Results";
 
     private FloraCategoryRepository floraCategoryRepository;
 
@@ -47,13 +58,68 @@ public class FloraCategoryListViewModel extends AndroidViewModel {
     }
 
     public void getFloraCategoriesApi() {
+        if(!isPerformingQuery){
+            isQueryExhausted = false;
+            executeGetFloraCategories();
+        }
+    }
+
+    private void executeGetFloraCategories() {
+        requestStartTime = System.currentTimeMillis();
+        isPerformingQuery = true;
+        cancelRequest = false;
+        viewState.setValue(ViewState.FLORA_CATEGORIES);
+
         final LiveData<Resource<List<FloraCategory>>> repositorySource = floraCategoryRepository.getFloraCategoriesApi(/*param*/);
 
         floraCategories.addSource(repositorySource, new Observer<Resource<List<FloraCategory>>>() {
             @Override
             public void onChanged(Resource<List<FloraCategory>> listResource) {
-                floraCategories.setValue(listResource);
+                if(!cancelRequest) {
+                    if(listResource != null) {
+                        floraCategories.setValue(listResource);
+                        if(listResource.status == Resource.Status.SUCCESS ){
+                            Log.d(TAG, "onChanged Success: Request Time " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds");
+                            isPerformingQuery = false;
+                            if(listResource.data != null) {
+                                if (listResource.data.size() == 0) {
+                                    Log.d(TAG, "onChanged: query is EXHAUSTED...");
+                                    floraCategories.setValue(new Resource<List<FloraCategory>>(
+                                            Resource.Status.ERROR,
+                                            listResource.data,
+                                            QUERY_EXHAUSTED
+                                    ));
+                                    isQueryExhausted = true;
+                                }
+                            }
+                            // must remove or it will keep listening to repository
+                            floraCategories.removeSource(repositorySource);
+                        }
+                        else if(listResource.status == Resource.Status.ERROR ){
+                            Log.d(TAG, "onChanged Error: Request Time " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds");
+                            isPerformingQuery = false;
+                            floraCategories.removeSource(repositorySource);
+                        }
+                    }
+                    else{
+                        floraCategories.removeSource(repositorySource);
+                    }
+                } else {
+                    floraCategories.removeSource(repositorySource);
+                }
             }
         });
     }
+
+    public void cancelGetFloraCategoriesRequest() {
+        if(isPerformingQuery) {
+            Log.d(TAG, "cancelGetFloraCategoriesRequest: canceling request");
+            cancelRequest = true;
+            isPerformingQuery =  false;
+        }
+    }
+
+//    public int getPageNumber() {
+//        return pageNumber;
+//    }
 }
