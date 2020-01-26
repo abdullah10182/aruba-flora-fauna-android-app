@@ -60,7 +60,12 @@ public interface FloraSpeciesDao {
         "ORDER BY common_name DESC")
     LiveData<List<FloraSpecies>> searchFloraSpecies(String query);
 
-    @Query("SELECT * FROM flora_species WHERE category_id = :category OR id = :speciesId OR common_name LIKE '%' || :searchQuery || '%' ORDER BY common_name ASC")
+    @Query("SELECT * FROM flora_species WHERE category_id = :category OR " +
+            "id = :speciesId OR " +
+            "common_name LIKE '%' || :searchQuery || '%' OR "+
+            "papiamento_name LIKE '%' || :searchQuery || '%' OR "+
+            "short_description LIKE '%' || :searchQuery || '%' "+
+            "ORDER BY common_name ASC")
     LiveData<List<FloraSpecies>> getFloraSpecies(String category, String speciesId, String searchQuery);
 
 

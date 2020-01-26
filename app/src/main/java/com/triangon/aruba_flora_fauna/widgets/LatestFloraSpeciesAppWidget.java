@@ -70,6 +70,8 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.ll_widget_list_wrapper, View.VISIBLE);
             views.setViewVisibility(R.id.tv_widget_loading, View.GONE);
 
+            apiCallInitiated = false;
+
         } else {
             views.setViewVisibility(R.id.tv_widget_loading, View.VISIBLE);
             views.setTextViewText(R.id.tv_widget_loading, "Could not load latest species at the moment");

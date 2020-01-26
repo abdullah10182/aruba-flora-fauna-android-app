@@ -34,6 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.NO_RESULTS;
+
 public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpeciesListener {
 
     private static final String TAG = "FloraSpeciesListActivit";
@@ -68,11 +70,8 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         initRecyclerView();
         subscribeObservers();
         showErrorScreen(false);
-        getFloraSpeciesApi();
+        getSpeciesList();
         initClickHandlerRetryButton();
-
-        if(mSelectedCategory != null && mSelectedCategoryName != null)
-            initToolbar(mSelectedCategoryName);
 
     }
 
@@ -95,18 +94,19 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
        // getSpeciesList();
     }
 
-//    private void getSpeciesList() {
-//        showProgressBar(true);
-//        mFloraSpeciesListViewModel.setDidRetrieveSpecies(false);
-//        if(mSelectedCategory != null && mSelectedCategoryName != null) {
-//            initToolbar(mSelectedCategoryName);
-//            mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
-//        } else if (mSearchQuery != null){
-//            initToolbar("Search Results: " + mSearchQuery);
-//            mFloraSpeciesListViewModel.resetFloraSpecies();
-//            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, null, mSearchQuery);
-//        }
-//    }
+    private void getSpeciesList() {
+        showProgressBar(true);
+        if(mSelectedCategory != null && mSelectedCategoryName != null) {
+            initToolbar(mSelectedCategoryName);
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
+            getFloraSpeciesApi();
+        } else if (mSearchQuery != null){
+            initToolbar("Search Results: " + mSearchQuery);
+            showProgressBar(true);
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, null, mSearchQuery);
+        }
+    }
 
     private void getFloraSpeciesApi() {
         showProgressBar(true);
@@ -170,9 +170,11 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                                 Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
                                 if(listResource.message != null)
                                     Toast.makeText(FloraSpeciesListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
-                                if(listResource.message != null && listResource.data.size() == 0){
+                                if(listResource.message != null && listResource.message.equals(NO_RESULTS) && mSearchQuery != null)
+                                    Toast.makeText(FloraSpeciesListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                else if(listResource.message != null && listResource.data.size() == 0)
                                     showErrorScreen(true);
-                                } else if (listResource.data.size() > 0 ){
+                                else if (listResource.data.size() > 0 ){
                                     mAdapter.setFloraSpecies(listResource.data);
                                     mRecyclerView.setVisibility(View.VISIBLE);
                                     showProgressBar(false);
@@ -184,6 +186,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                                 Log.d(TAG, "onChanged: status: SUCCESS, #categories: " + listResource.data.size());
                                 //mAdapter.hideLoading();
                                 showProgressBar(false);
+                                //showErrorScreen(false);
                                 mRecyclerView.setVisibility(View.VISIBLE);
                                 mAdapter.setFloraSpecies(listResource.data);
                                 break;

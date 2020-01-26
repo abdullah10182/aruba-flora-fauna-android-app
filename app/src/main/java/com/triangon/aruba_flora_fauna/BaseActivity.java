@@ -108,25 +108,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(mSuggestions == null && newText.length() > 0 && mSearchInitiated == false) {
-                    getFloraSpeciesSuggestionsApi();
-                }
-                return true;
+                return false;
+                //TODO: make suggestions work again
+//                if(mSuggestions == null && newText.length() > 0 && mSearchInitiated == false) {
+//                    getFloraSpeciesSuggestionsApi();
+//                }
+//                return true;
             }
         });
-
-
-//        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-//            @Override
-//            public void onSearchViewShown() {
-//
-//            }
-//
-//            @Override
-//            public void onSearchViewClosed() {
-//
-//            }
-//        });
 
         return true;
     }
