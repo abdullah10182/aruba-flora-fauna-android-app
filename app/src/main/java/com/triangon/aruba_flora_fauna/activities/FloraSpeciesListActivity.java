@@ -1,22 +1,36 @@
 package com.triangon.aruba_flora_fauna.activities;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
+import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraSpeciesListener;
+import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
+import com.triangon.aruba_flora_fauna.utils.Resource;
+import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,7 +39,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.QUERY_EXHAUSTED;
+
 public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpeciesListener {
+
+    private static final String TAG = "FloraSpeciesListActivit";
 
     private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
     @BindView(R.id.rv_flora_species_list)
@@ -57,8 +75,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         initRecyclerView();
         subscribeObservers();
         showErrorScreen(false);
-        //showProgressBar(true);
-        getSpeciesList();
+        getFloraSpeciesApi();
         initClickHandlerRetryButton();
 
     }
@@ -68,7 +85,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
             @Override
             public void onClick(View view) {
                 showErrorScreen(false);
-                getSpeciesList();
+                getFloraSpeciesApi();
             }
         });
     }
@@ -82,61 +99,101 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
        // getSpeciesList();
     }
 
-    private void getSpeciesList() {
+//    private void getSpeciesList() {
+//        showProgressBar(true);
+//        mFloraSpeciesListViewModel.setDidRetrieveSpecies(false);
+//        if(mSelectedCategory != null && mSelectedCategoryName != null) {
+//            initToolbar(mSelectedCategoryName);
+//            mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
+//        } else if (mSearchQuery != null){
+//            initToolbar("Search Results: " + mSearchQuery);
+//            mFloraSpeciesListViewModel.resetFloraSpecies();
+//            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, null, mSearchQuery);
+//        }
+//    }
+
+    private void getFloraSpeciesApi() {
         showProgressBar(true);
-        mFloraSpeciesListViewModel.setDidRetrieveSpecies(false);
-        if(mSelectedCategory != null && mSelectedCategoryName != null) {
-            initToolbar(mSelectedCategoryName);
-            mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
-        } else if (mSearchQuery != null){
-            initToolbar("Search Results: " + mSearchQuery);
-            mFloraSpeciesListViewModel.resetFloraSpecies();
-            mFloraSpeciesListViewModel.getFloraSpeciesApi(null, null, mSearchQuery);
-        }
+        mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
     }
 
     private void initRecyclerView() {
-        mAdapter = new FloraSpeciesRecyclerAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+        int imageWidthPixels = 480;
+        int imageHeightPixels = 480;
+
+        ListPreloader.PreloadSizeProvider sizeProvider =
+                new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
+
+        mAdapter = new FloraSpeciesRecyclerAdapter(this, initGlide(), sizeProvider);
+
+        RecyclerViewPreloader<String> preloader =
+                new RecyclerViewPreloader<>(
+                        Glide.with(this), mAdapter, sizeProvider, 20);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+//        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
+//        mAdapter = new FloraSpeciesRecyclerAdapter(this, initGlide(), viewPreloader);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<>(
+//                Glide.with(this),
+//                mAdapter,
+//                viewPreloader,
+//                20);
+
+        mRecyclerView.addOnScrollListener(preloader);
+
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private RequestManager initGlide() {
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.aff_logo_grey)
+                .error(R.drawable.aff_logo_grey);
+        return Glide.with(this)
+                .setDefaultRequestOptions(options);
     }
 
     private void subscribeObservers() {
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
+        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<Resource<List<FloraSpecies>>>() {
             @Override
-            public void onChanged(List<FloraSpecies> floraSpecies) {
-                if(floraSpecies != null && floraSpecies.size() > 0) {
-                    mAdapter.setFloraSpecies(floraSpecies);
-                    mFloraSpeciesListViewModel.setDidRetrieveSpecies(true);
-                    mFloraSpeciesListViewModel.setIsPerformingQuery(false);
-                    if(mSelectedCategory != null && mFloraSpeciesListViewModel.getSelectedFloraCategory().equals(floraSpecies.get(0).getCategoryId())){
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        showProgressBar(false);
-                        mNoResults.setVisibility(View.GONE);
-                        mAdapter.setFloraSpecies(floraSpecies);
-                    } else if(mSearchQuery != null){
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        showProgressBar(false);
-                        mNoResults.setVisibility(View.GONE);
-                        mAdapter.setFloraSpecies(floraSpecies);
+            public void onChanged(Resource<List<FloraSpecies>> listResource) {
+                if(listResource != null) {
+                    Log.d(TAG, "onChanged: status" + listResource.status);
+
+                    if(listResource.data != null) {
+                        switch (listResource.status) {
+                            case LOADING: {
+                                //mAdapter.displayOnlyLoading();
+                                showProgressBar(true);
+                            }
+                            case ERROR: {
+                                Log.e(TAG, "onChanged: cannot refresh cache.");
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
+                                Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
+                                //mAdapter.hideLoading();
+                                mAdapter.setFloraSpecies(listResource.data);
+                                Toast.makeText(FloraSpeciesListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+//                                if(listResource.message.equals(QUERY_EXHAUSTED)){
+//                                    //mAdapter.setQueryExhausted();
+//                                    showErrorScreen(true);
+//                                }
+                                break;
+                            }
+                            case SUCCESS: {
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #categories: " + listResource.data.size());
+                                //mAdapter.hideLoading();
+                                showProgressBar(false);
+                                mAdapter.setFloraSpecies(listResource.data);
+                                break;
+                            }
+                        }
                     }
-                } else if (floraSpecies != null && floraSpecies.size() == 0 && mSelectedCategory == null){
-                    mNoResults.setVisibility(View.VISIBLE);
-                    showProgressBar(false);
                 }
             }
         });
 
-//        mFloraSpeciesListViewModel.isSpeciesRequestTimedOut().observe(this, new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean aBoolean) {
-//                if( aBoolean && !mFloraSpeciesListViewModel.isDidRetrieveSpecies()) {
-//                    showProgressBar(false);
-//                    showErrorScreen(true);
-//                }
-//            }
-//        });
     }
 
     @Override

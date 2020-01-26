@@ -1,72 +1,52 @@
 package com.triangon.aruba_flora_fauna.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ListPreloader.PreloadModelProvider<String> {
 
     private List<FloraSpecies> mFloraSpecies;
     private OnFloraSpeciesListener mOnFloraSpeciesListener;
+    private RequestManager requestManager;
+    private ListPreloader.PreloadSizeProvider preloadSizeProvider;
 
-    public FloraSpeciesRecyclerAdapter(OnFloraSpeciesListener mOnFloraSpeciesListener) {
+    public FloraSpeciesRecyclerAdapter(OnFloraSpeciesListener mOnFloraSpeciesListener,
+                                       RequestManager requestManager,
+                                       ListPreloader.PreloadSizeProvider viewPreloadSizeProvider) {
         this.mOnFloraSpeciesListener = mOnFloraSpeciesListener;
+        this.requestManager = requestManager;
+        this.preloadSizeProvider = viewPreloadSizeProvider;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_flora_species_list_item, parent, false);
-        return new FloraSpeciesViewHolder(view, mOnFloraSpeciesListener);
+        return new FloraSpeciesViewHolder(view, mOnFloraSpeciesListener, requestManager, preloadSizeProvider);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-        ((FloraSpeciesViewHolder)holder).mTitle.setText(mFloraSpecies.get(position).getCommonName());
-        ((FloraSpeciesViewHolder)holder).mSubTitle.setText(mFloraSpecies.get(position).getPapiamentoName());
-        ((FloraSpeciesViewHolder)holder).mCategory.setText("Category: " + mFloraSpecies.get(position).getCategoryName());
-        ((FloraSpeciesViewHolder)holder).mFamily.setText("Family: " + mFloraSpecies.get(position).getFamily());
-
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.aff_logo_grey).error(R.drawable.aff_logo_grey);
-
-        Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(requestOptions)
-                .load(mFloraSpecies.get(position).getMainImage().getImageThumbnail())
-                .into(((FloraSpeciesViewHolder)holder).mImage);
-
-        //protected
-        if(mFloraSpecies.get(position).isProtectedLocally()){
-            ((FloraSpeciesViewHolder)holder).mProtectedWrapper.setVisibility(View.VISIBLE);
-        } else {
-            ((FloraSpeciesViewHolder)holder).mProtectedWrapper.setVisibility(View.GONE);
-        }
-
-        //invasive
-        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("11")){
-            ((FloraSpeciesViewHolder)holder).mInvasiveWrapper.setVisibility(View.VISIBLE);
-        } else {
-            ((FloraSpeciesViewHolder)holder).mInvasiveWrapper.setVisibility(View.GONE);
-        }
-
-        //endemic
-        if(mFloraSpecies.get(position).getStatusId() != null && mFloraSpecies.get(position).getStatusId().equals("13")){
-            ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.VISIBLE);
-        } else {
-            ((FloraSpeciesViewHolder)holder).mEnedmicWrapper.setVisibility(View.GONE);
-        }
-
+        ((FloraSpeciesViewHolder)holder).onBind(mFloraSpecies.get(position));
     }
 
     @Override
@@ -85,5 +65,21 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public List<FloraSpecies> getFloraSpecies() {
         return mFloraSpecies;
+    }
+
+    @NonNull
+    @Override
+    public List<String> getPreloadItems(int position) {
+        String url = mFloraSpecies.get(position).getMainImage().getImageThumbnail();
+        if(TextUtils.isEmpty(url)){
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(url);
+    }
+
+    @Nullable
+    @Override
+    public RequestBuilder<?> getPreloadRequestBuilder(@NonNull String item) {
+        return requestManager.load(item);
     }
 }

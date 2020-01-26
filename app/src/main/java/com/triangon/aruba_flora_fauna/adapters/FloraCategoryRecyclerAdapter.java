@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
@@ -30,11 +32,11 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private List<FloraCategory> mFloraCategories;
     private OnFloraCategoryListener mOnFloraCategoryListener;
     private RequestManager requestManager;
-    private ViewPreloadSizeProvider<String> preloadSizeProvider;
+    private ListPreloader.PreloadSizeProvider  preloadSizeProvider;
 
     public FloraCategoryRecyclerAdapter(OnFloraCategoryListener mOnFloraCategoryListener,
                                         RequestManager requestManager,
-                                        ViewPreloadSizeProvider<String> viewPreloadSizeProvider) {
+                                        ListPreloader.PreloadSizeProvider  viewPreloadSizeProvider) {
         this.mOnFloraCategoryListener = mOnFloraCategoryListener;
         this.requestManager = requestManager;
         this.preloadSizeProvider = viewPreloadSizeProvider;
@@ -56,6 +58,18 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             ((FloraCategoryViewHolder)holder).onBind(mFloraCategories.get(position));
         }
         //TODO else itemViewType == other type to reuse recycle view
+
+//                Glide.with(holder.itemView.getContext())
+//                .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .preload();
+//
+//
+//        Glide.with(holder.itemView.getContext())
+//                .load(mFloraCategories.get(position).getCategoryImage().getImageThumbnail())
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(((FloraCategoryViewHolder)holder).mImage);
+
 
     }
 

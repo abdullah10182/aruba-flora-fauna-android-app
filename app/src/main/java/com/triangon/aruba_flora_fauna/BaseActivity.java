@@ -62,7 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
         //LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
-        subscribeObservers();
+        //subscribeObservers();
         //initLatestSpeciesStorage();
     }
 
@@ -195,39 +195,39 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void initLatestSpeciesStorage() {
-        SharedPreferences prefs = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE);
-        long latestFloraSpeciesSavedTime = prefs.getLong("latestFloraSpeciesSavedTime",0);
-        long currentTimeMillis = System.currentTimeMillis();
-
-
-        if(latestFloraSpeciesSavedTime == 0 || currentTimeMillis - latestFloraSpeciesSavedTime > 1800000) {
-            FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
-
-            Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
-                    .getFloraSpeciesSuggestions("created");
-
-            responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
-                @Override
-                public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
-                    if(response.code() == 200) {
-                        List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
-                        setLatestSpeciesDataInSharedPreferences(speciesList);
-
-                    } else {
-                        try {
-                            Log.d(TAG, "onResponse: " + response.errorBody().string() );
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
-
-                }
-            });
-        }
+//        SharedPreferences prefs = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE);
+//        long latestFloraSpeciesSavedTime = prefs.getLong("latestFloraSpeciesSavedTime",0);
+//        long currentTimeMillis = System.currentTimeMillis();
+//
+//
+//        if(latestFloraSpeciesSavedTime == 0 || currentTimeMillis - latestFloraSpeciesSavedTime > 1800000) {
+//            FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
+//
+//            Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
+//                    .getFloraSpeciesSuggestions("created");
+//
+//            responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
+//                @Override
+//                public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
+//                    if(response.code() == 200) {
+//                        List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
+//                        setLatestSpeciesDataInSharedPreferences(speciesList);
+//
+//                    } else {
+//                        try {
+//                            Log.d(TAG, "onResponse: " + response.errorBody().string() );
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
+//
+//                }
+//            });
+//        }
     }
 
     public void setLatestSpeciesDataInSharedPreferences(List<FloraSpecies> latestFloraSpecies) {

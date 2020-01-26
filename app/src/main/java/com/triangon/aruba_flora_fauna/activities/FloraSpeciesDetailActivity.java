@@ -122,7 +122,7 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
             mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
             loaderScreen(true);
             mFloraSpeciesListViewModel.getFloraSpeciesApi(null, mSelectedSpeciesId, null);
-            subscribeObservers();
+            //subscribeObservers();
             mScrollViewSpeciesDetail.setVisibility(View.GONE);
         }
     }
@@ -294,23 +294,23 @@ public class FloraSpeciesDetailActivity extends AppCompatActivity implements OnA
 
     }
 
-    private void subscribeObservers() {
-        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
-            @Override
-            public void onChanged(List<FloraSpecies> floraSpecies) {
-                if(floraSpecies != null) {
-                    if(mFloraSpeciesListViewModel.getSelectedFloraId().equals(floraSpecies.get(0).getId())) {
-                        mSelectedSpecies = floraSpecies.get(0);
-                        setHeroImage();
-                        setTextFields();
-                        initMoreInfoLink();
-                        initRecyclerView();
-                        loaderScreen(false);
-                    }
-                }
-            }
-        });
-    }
+//    private void subscribeObservers() {
+//        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<List<FloraSpecies>>() {
+//            @Override
+//            public void onChanged(List<FloraSpecies> floraSpecies) {
+//                if(floraSpecies != null) {
+//                    if(mFloraSpeciesListViewModel.getSelectedFloraId().equals(floraSpecies.get(0).getId())) {
+//                        mSelectedSpecies = floraSpecies.get(0);
+//                        setHeroImage();
+//                        setTextFields();
+//                        initMoreInfoLink();
+//                        initRecyclerView();
+//                        loaderScreen(false);
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     private void loaderScreen(Boolean action) {
         if(action) {

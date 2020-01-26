@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,12 +28,12 @@ public class FloraCategoryViewHolder extends RecyclerView.ViewHolder implements 
     ImageView mImage;
     OnFloraCategoryListener onFloraCategoryListener;
     RequestManager requestManager;
-    ViewPreloadSizeProvider viewPreloadSizeProvider;
+    ListPreloader.PreloadSizeProvider viewPreloadSizeProvider;
 
     public FloraCategoryViewHolder(@NonNull View itemView,
                                    OnFloraCategoryListener onFloraCategoryListener,
                                    RequestManager requestManager,
-                                   ViewPreloadSizeProvider viewPreloadSizeProvider) {
+                                   ListPreloader.PreloadSizeProvider viewPreloadSizeProvider) {
         super(itemView);
         this.onFloraCategoryListener = onFloraCategoryListener;
         this.requestManager = requestManager;
@@ -45,14 +46,11 @@ public class FloraCategoryViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     public void onBind(FloraCategory floraCategory) {
-
         requestManager
                 .load(floraCategory.getCategoryImage().getImageThumbnail())
                 .into(mImage);
 
         mTitle.setText(floraCategory.getName());
-        viewPreloadSizeProvider.setView(mImage);
-
 
     }
 

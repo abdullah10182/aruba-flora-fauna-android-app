@@ -7,51 +7,92 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "flora_species")
 public class FloraSpecies implements Parcelable {
 
+    @PrimaryKey
+    @NonNull
     private String id;
 
+    @ColumnInfo(name = "common_name")
     @SerializedName("common_name")
     private String commonName;
 
+    @ColumnInfo(name = "papiamento_name")
     @SerializedName("papiamento_name")
     private String papiamentoName;
 
+    @ColumnInfo(name = "scientific_name")
     @SerializedName("scientific_name")
     private String scientificName;
 
+    @ColumnInfo(name = "protected_locally")
     @SerializedName("protected_locally")
     private boolean protectedLocally;
 
+    @ColumnInfo(name = "category_id")
     @SerializedName("category_id")
     private String categoryId;
 
+    @ColumnInfo(name = "category_name")
     @SerializedName("category_name")
     private String categoryName;
 
+    @ColumnInfo(name = "status_id")
     @SerializedName("status_id")
     private String statusId;
 
+    @ColumnInfo(name = "status_name")
     @SerializedName("status_name")
     private String statusName;
 
+    @ColumnInfo(name = "family")
     private String family;
 
+    @ColumnInfo(name = "short_description")
     @SerializedName("short_description")
     private String shortDescription;
 
+    @ColumnInfo(name = "description")
     private String description;
 
+    @ColumnInfo(name = "more_info_link")
     @SerializedName("more_info_link")
     private String moreInfoLink;
 
+    @ColumnInfo(name = "main_image")
     @SerializedName("main_image")
     private ImageBundle mainImage;
 
+    @ColumnInfo(name = "additional_images")
     @SerializedName("additional_images")
     private List<ImageBundle> additionalImages;
 
-    public FloraSpecies(String id, String commonName, String papiamentoName, String scientificName, boolean protectedLocally, String categoryId, String categoryName, String statusId, String statusName, String family, String shortDescription, String description, String moreInfoLink, ImageBundle mainImage, List<ImageBundle> additionalImages) {
+    @ColumnInfo(name = "timestamp")
+    private int timestamp;
+
+    public FloraSpecies(String id,
+                        String commonName,
+                        String papiamentoName,
+                        String scientificName,
+                        boolean protectedLocally,
+                        String categoryId,
+                        String categoryName,
+                        String statusId,
+                        String statusName,
+                        String family,
+                        String shortDescription,
+                        String description,
+                        String moreInfoLink,
+                        ImageBundle mainImage,
+                        List<ImageBundle> additionalImages,
+                        int timestamp) {
         this.id = id;
         this.commonName = commonName;
         this.papiamentoName = papiamentoName;
@@ -67,8 +108,10 @@ public class FloraSpecies implements Parcelable {
         this.moreInfoLink = moreInfoLink;
         this.mainImage = mainImage;
         this.additionalImages = additionalImages;
+        this.timestamp = timestamp;
     }
 
+    @Ignore
     public FloraSpecies() {
     }
 
@@ -88,6 +131,7 @@ public class FloraSpecies implements Parcelable {
         moreInfoLink = in.readString();
         mainImage = in.readParcelable(ImageBundle.class.getClassLoader());
         additionalImages = in.createTypedArrayList(ImageBundle.CREATOR);
+        timestamp = in.readInt();
     }
 
     public static final Creator<FloraSpecies> CREATOR = new Creator<FloraSpecies>() {
@@ -222,6 +266,14 @@ public class FloraSpecies implements Parcelable {
         this.statusName = statusName;
     }
 
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "FloraSpecies{" +
@@ -240,8 +292,10 @@ public class FloraSpecies implements Parcelable {
                 ", moreInfoLink='" + moreInfoLink + '\'' +
                 ", mainImage=" + mainImage +
                 ", additionalImages=" + additionalImages +
+                ", timestamp=" + timestamp +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
@@ -265,5 +319,6 @@ public class FloraSpecies implements Parcelable {
         parcel.writeString(moreInfoLink);
         parcel.writeParcelable(mainImage, i);
         parcel.writeTypedList(additionalImages);
+        parcel.writeInt(timestamp);
     }
 }

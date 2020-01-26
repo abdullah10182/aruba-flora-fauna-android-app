@@ -8,34 +8,17 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.activities.FloraCategoryListActivity;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
-import com.triangon.aruba_flora_fauna.requests.FloraSpeciesApi;
-import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
-import com.triangon.aruba_flora_fauna.requests.responses.FloraCategoryListResponse;
-import com.triangon.aruba_flora_fauna.requests.responses.FloraSpeciesListResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Implementation of App Widget functionality.
@@ -52,13 +35,13 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.ll_widget_wrapper, pendingIntent);
 
-        populateWdigetList(latestSpecies, views);
+        populateWidgetList(latestSpecies, views);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private static void populateWdigetList(List<FloraSpecies> latestSpecies, RemoteViews views) {
+    private static void populateWidgetList(List<FloraSpecies> latestSpecies, RemoteViews views) {
         if(latestSpecies.size() > 0) {
 
             views.setTextViewText(R.id.tv_latest_species_widget_title_0, latestSpecies.get(0).getCommonName() + " (" +
@@ -84,6 +67,9 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.ll_widget_list_wrapper, View.VISIBLE);
             views.setViewVisibility(R.id.tv_widget_loading, View.GONE);
 
+        } else {
+            views.setViewVisibility(R.id.tv_widget_loading, View.VISIBLE);
+            views.setTextViewText(R.id.tv_widget_loading, "Could not load latest species at the moment");
         }
 
     }

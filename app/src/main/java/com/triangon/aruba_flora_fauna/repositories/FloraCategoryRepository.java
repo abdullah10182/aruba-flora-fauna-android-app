@@ -5,8 +5,7 @@ import android.util.Log;
 
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.persistence.FloraCategoryDao;
-import com.triangon.aruba_flora_fauna.persistence.FloraCategoryDatabase;
-import com.triangon.aruba_flora_fauna.requests.FloraCategoryApiClient;
+import com.triangon.aruba_flora_fauna.persistence.AffDatabase;
 import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
 import com.triangon.aruba_flora_fauna.requests.executors.AppExecutors;
 import com.triangon.aruba_flora_fauna.requests.responses.ApiResponse;
@@ -35,7 +34,7 @@ public class FloraCategoryRepository {
     }
 
     private FloraCategoryRepository(Context context) {
-        floraCategoryDao = FloraCategoryDatabase.getInstance(context).getFloraCategoryDao();
+        floraCategoryDao = AffDatabase.getInstance(context).getFloraCategoryDao();
     }
 
     public LiveData<Resource<List<FloraCategory>>> getFloraCategoriesApi(/*final String query*/) {
@@ -75,7 +74,7 @@ public class FloraCategoryRepository {
                     return true;
                 }
 
-                if((currentTime - lastRefresh) >= 60){
+                if((currentTime - lastRefresh) >= Constants.FLORA_CATEGORY_REFRESH_TIME){
                     Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
                     return true;
                 }

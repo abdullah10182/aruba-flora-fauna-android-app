@@ -30,14 +30,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.google.android.material.appbar.AppBarLayout;
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
+import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
@@ -174,26 +177,37 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                 .error(R.drawable.aff_logo_grey);
         return Glide.with(this)
                 .setDefaultRequestOptions(options);
-
     }
 
     private void initRecyclerView() {
         int columnCount = 2;
-        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
-        mAdapter = new FloraCategoryRecyclerAdapter(this, initGlide(), viewPreloader);
+        int imageWidthPixels = 480;
+        int imageHeightPixels = 480;
 
-        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<String>(
-                Glide.with(this),
-                mAdapter,
-                viewPreloader,
-                20);
+        ListPreloader.PreloadSizeProvider sizeProvider =
+                new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
 
-        mRecyclerView.addOnScrollListener(preloader);
+        mAdapter = new FloraCategoryRecyclerAdapter(this, initGlide(), sizeProvider);
+
+        RecyclerViewPreloader<String> preloader =
+                new RecyclerViewPreloader<>(
+                        Glide.with(this), mAdapter, sizeProvider, 20);
+
+
+//        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
+//        mAdapter = new FloraCategoryRecyclerAdapter(this, initGlide(), viewPreloader);
+//        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<String>(
+//                Glide.with(this),
+//                mAdapter,
+//                viewPreloader,
+//                20);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),columnCount);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
+        mRecyclerView.addItemDecoration(new GridLayoutItemDecoration(columnCount, 0, true));
+
+        mRecyclerView.addOnScrollListener(preloader);
+
         mRecyclerView.setAdapter(mAdapter);
 
     }

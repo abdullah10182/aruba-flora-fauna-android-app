@@ -13,14 +13,15 @@ public class FloraSpeciesSuggestionsViewModel extends ViewModel {
     private FloraSpeciesRepository mFloraSpeciesSuggestionsRepository;
 
     public FloraSpeciesSuggestionsViewModel(){
-        mFloraSpeciesSuggestionsRepository = mFloraSpeciesSuggestionsRepository.getInstance();
+       // mFloraSpeciesSuggestionsRepository = mFloraSpeciesSuggestionsRepository.getInstance();
     }
 
     public LiveData<List<FloraSpecies>> getFloraSpeciesSuggestions() {
-        return mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestions();
+        //return mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestions();
+        return null;
     }
 
     public void getFloraSpeciesSuggestionsApi(String sortBy) {
-        mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestionsApi(sortBy);
+        //mFloraSpeciesSuggestionsRepository.getFloraSpeciesSuggestionsApi(sortBy);
     }
 }
