@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -56,10 +57,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ProgressBar mSearchProgressBar;
     private boolean mSearchInitiated = false;
     private static final String LATEST_SPECIES_PREFERENCES = "myPrefrences";
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
         //LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
         //subscribeObservers();

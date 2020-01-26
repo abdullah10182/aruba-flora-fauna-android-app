@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "351351793466",
+    "firebase_url": "https://aruba-flora-and-fauna.firebaseio.com",
+    "project_id": "aruba-flora-and-fauna",
+    "storage_bucket": "aruba-flora-and-fauna.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351351793466:android:8b490003d7f600e7b09203",
+        "android_client_info": {
+          "package_name": "com.triangon.aruba_flora_fauna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351351793466-e2s423ks10tvgbgqclfits75prkgvthk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.triangon.aruba_flora_fauna",
+            "certificate_hash": "02948a19a600af20130a208acf3530596418ab7b"
+          }
+        },
+        {
+          "client_id": "351351793466-ea2fkjh7g6eoid9krfupe84mla51feb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo8E_VtBEaU4Qxvx2lAXU4ywW31bjz66E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351351793466-ea2fkjh7g6eoid9krfupe84mla51feb1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
