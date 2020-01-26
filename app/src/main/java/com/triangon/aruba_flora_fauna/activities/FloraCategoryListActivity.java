@@ -1,20 +1,12 @@
 package com.triangon.aruba_flora_fauna.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -35,12 +27,10 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.util.FixedPreloadSizeProvider;
-import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.google.android.material.appbar.AppBarLayout;
 import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
-import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.GridLayoutItemDecoration;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraCategoryListener;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
@@ -49,7 +39,7 @@ import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 
 import java.util.List;
 
-import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.QUERY_EXHAUSTED;
+import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.NO_RESULTS;
 
 public class FloraCategoryListActivity extends BaseActivity implements OnFloraCategoryListener {
 
@@ -108,6 +98,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
     private void getFloraCategoriesApi() {
         showProgressBar(true);
+        mRecyclerView.setVisibility(View.GONE);
         //mFloraCategoryListViewModel.getFloraCategoriesApi();
         mFloraCategoryListViewModel.getFloraCategoriesApi(/*params*/);
     }
@@ -122,8 +113,23 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                     if(listResource.data != null) {
                         switch (listResource.status) {
                             case LOADING: {
-                                //mAdapter.displayOnlyLoading();
+                                mAdapter.displayOnlyLoading();
                                 showProgressBar(true);
+                            }
+                            case ERROR: {
+                                Log.e(TAG, "onChanged: cannot refresh cache.");
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
+                                Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
+                                if(listResource.message != null)
+                                    Toast.makeText(FloraCategoryListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                if(listResource.message != null && listResource.data.size() == 0){
+                                    showErrorScreen(true);
+                                } else if (listResource.data.size() > 0 ){
+                                    mAdapter.setFloraCategories(listResource.data);
+                                    mRecyclerView.setVisibility(View.VISIBLE);
+                                    showProgressBar(false);
+                                }
+                                break;
                             }
                             case SUCCESS: {
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
@@ -131,19 +137,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                                 //mAdapter.hideLoading();
                                 showProgressBar(false);
                                 mAdapter.setFloraCategories(listResource.data);
-                                break;
-                            }
-                            case ERROR: {
-                                Log.e(TAG, "onChanged: cannot refresh cache.");
-                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
-                                Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
-                                mAdapter.hideLoading();
-                                mAdapter.setFloraCategories(listResource.data);
-                                Toast.makeText(FloraCategoryListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
-                                if(listResource.message.equals(QUERY_EXHAUSTED)){
-                                    mAdapter.setQueryExhausted();
-                                    showErrorScreen(true);
-                                }
+                                mRecyclerView.setVisibility(View.VISIBLE);
                                 break;
                             }
                         }
@@ -191,8 +185,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
         RecyclerViewPreloader<String> preloader =
                 new RecyclerViewPreloader<>(
-                        Glide.with(this), mAdapter, sizeProvider, 20);
-
+                        Glide.with(this), mAdapter, sizeProvider, 10);
 
 //        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
 //        mAdapter = new FloraCategoryRecyclerAdapter(this, initGlide(), viewPreloader);
@@ -289,6 +282,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
 
     public void showErrorScreen(Boolean show){
         if(show) {
+            showProgressBar(false);
             mRecyclerView.setVisibility(View.INVISIBLE);
             mErrorScreen.setVisibility(View.VISIBLE);
         } else {

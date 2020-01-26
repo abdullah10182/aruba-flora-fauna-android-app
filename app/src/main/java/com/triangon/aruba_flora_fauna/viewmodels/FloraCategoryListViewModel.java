@@ -32,7 +32,7 @@ public class FloraCategoryListViewModel extends AndroidViewModel {
     private boolean cancelRequest;
     private long requestStartTime;
 
-    public static final String QUERY_EXHAUSTED = "No Results";
+    public static final String NO_RESULTS = "No Results";
 
     private FloraCategoryRepository floraCategoryRepository;
 
@@ -83,13 +83,11 @@ public class FloraCategoryListViewModel extends AndroidViewModel {
                             isPerformingQuery = false;
                             if(listResource.data != null) {
                                 if (listResource.data.size() == 0) {
-                                    Log.d(TAG, "onChanged: query is EXHAUSTED...");
                                     floraCategories.setValue(new Resource<List<FloraCategory>>(
                                             Resource.Status.ERROR,
                                             listResource.data,
-                                            QUERY_EXHAUSTED
+                                            NO_RESULTS
                                     ));
-                                    isQueryExhausted = true;
                                 }
                             }
                             // must remove or it will keep listening to repository

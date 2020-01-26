@@ -70,7 +70,9 @@ public class FloraSpeciesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @NonNull
     @Override
     public List<String> getPreloadItems(int position) {
-        String url = mFloraSpecies.get(position).getMainImage().getImageThumbnail();
+        String url = "";
+        if(mFloraSpecies.get(position).getId() != null)
+            url = mFloraSpecies.get(position).getMainImage().getImageThumbnail();
         if(TextUtils.isEmpty(url)){
             return Collections.emptyList();
         }

@@ -11,6 +11,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.util.ViewPreloadSizeProvider;
+import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.R;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 
@@ -147,7 +148,7 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public void setQueryExhausted(){
         hideLoading();
         FloraCategory exhaustedRecipe = new FloraCategory();
-        exhaustedRecipe.setName("EXHAUSTED...");
+        exhaustedRecipe.setName("NO RESULTS...");
         mFloraCategories.add(exhaustedRecipe);
         notifyDataSetChanged();
     }
@@ -155,7 +156,9 @@ public class FloraCategoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     @NonNull
     @Override
     public List<String> getPreloadItems(int position) {
-        String url = mFloraCategories.get(position).getCategoryImage().getImageThumbnail();
+        String url = "";
+        if(mFloraCategories.get(position).getId() != null)
+            url = mFloraCategories.get(position).getCategoryImage().getImageThumbnail();
         if(TextUtils.isEmpty(url)){
             return Collections.emptyList();
         }

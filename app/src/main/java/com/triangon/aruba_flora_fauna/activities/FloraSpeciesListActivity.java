@@ -6,7 +6,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.util.FixedPreloadSizeProvider;
-import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 
 import android.content.Intent;
@@ -19,18 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.triangon.aruba_flora_fauna.BaseActivity;
-import com.triangon.aruba_flora_fauna.adapters.FloraCategoryRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraSpeciesListener;
-import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.utils.Resource;
-import com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,8 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.QUERY_EXHAUSTED;
 
 public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpeciesListener {
 
@@ -78,6 +71,9 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
         getFloraSpeciesApi();
         initClickHandlerRetryButton();
 
+        if(mSelectedCategory != null && mSelectedCategoryName != null)
+            initToolbar(mSelectedCategoryName);
+
     }
 
     private void initClickHandlerRetryButton() {
@@ -114,6 +110,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
 
     private void getFloraSpeciesApi() {
         showProgressBar(true);
+        mRecyclerView.setVisibility(View.GONE);
         mFloraSpeciesListViewModel.getFloraSpeciesApi(mSelectedCategory, null, null);
     }
 
@@ -171,13 +168,15 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                                 Log.e(TAG, "onChanged: cannot refresh cache.");
                                 Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
                                 Log.e(TAG, "onChanged: status: ERROR, #categories: " + listResource.data.size());
-                                //mAdapter.hideLoading();
-                                mAdapter.setFloraSpecies(listResource.data);
-                                Toast.makeText(FloraSpeciesListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
-//                                if(listResource.message.equals(QUERY_EXHAUSTED)){
-//                                    //mAdapter.setQueryExhausted();
-//                                    showErrorScreen(true);
-//                                }
+                                if(listResource.message != null)
+                                    Toast.makeText(FloraSpeciesListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                if(listResource.message != null && listResource.data.size() == 0){
+                                    showErrorScreen(true);
+                                } else if (listResource.data.size() > 0 ){
+                                    mAdapter.setFloraSpecies(listResource.data);
+                                    mRecyclerView.setVisibility(View.VISIBLE);
+                                    showProgressBar(false);
+                                }
                                 break;
                             }
                             case SUCCESS: {
@@ -185,6 +184,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                                 Log.d(TAG, "onChanged: status: SUCCESS, #categories: " + listResource.data.size());
                                 //mAdapter.hideLoading();
                                 showProgressBar(false);
+                                mRecyclerView.setVisibility(View.VISIBLE);
                                 mAdapter.setFloraSpecies(listResource.data);
                                 break;
                             }
@@ -218,6 +218,7 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
 
     public void showErrorScreen(Boolean show){
         if(show) {
+            showProgressBar(false);
             mRecyclerView.setVisibility(View.INVISIBLE);
             mErrorScreen.setVisibility(View.VISIBLE);
         } else {
