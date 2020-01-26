@@ -21,7 +21,7 @@ public interface FloraSpeciesApi {
     );
 
     @GET("aff-api/flora-species-search-suggestions")
-    LiveData<ApiResponse<FloraSpeciesListResponse>> getFloraSpeciesSuggestions(
+    Call<FloraSpeciesListResponse> getFloraSpeciesSuggestions(
             @Query("sort_by")
             String sortBy
     );

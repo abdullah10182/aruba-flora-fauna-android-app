@@ -26,6 +26,8 @@ import static android.content.Context.JOB_SCHEDULER_SERVICE;
 public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
     private static final String TAG = "LatestSpeciesAppWidget";
     private static final int JOB_ID = 0;
+    private static boolean apiCallInitiated = false;
+    private static int jobInterval = 15 * 60 * 1000; //30min
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, List<FloraSpecies> latestSpecies) {
 
@@ -35,7 +37,8 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.ll_widget_wrapper, pendingIntent);
 
-        populateWidgetList(latestSpecies, views);
+        if(apiCallInitiated)
+            populateWidgetList(latestSpecies, views);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -87,7 +90,7 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
     public void onEnabled(Context context) {
         ComponentName serviceComponent = new ComponentName(context, LatestFloraSpeciesWidgetService.class);
         JobInfo info = new JobInfo.Builder(JOB_ID, serviceComponent)
-                .setPeriodic(15 * 60 * 1000) //period that the job runs
+                .setPeriodic(jobInterval) //period that the job runs
                 .build();
 
         JobScheduler scheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
@@ -101,6 +104,7 @@ public class LatestFloraSpeciesAppWidget extends AppWidgetProvider {
     }
 
     public static void getLatestFloraSpeciesWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, List<FloraSpecies> latestSpecies) {
+        apiCallInitiated = true;
         for(int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId, latestSpecies );
         }

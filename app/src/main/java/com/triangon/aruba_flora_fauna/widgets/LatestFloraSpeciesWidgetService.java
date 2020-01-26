@@ -53,39 +53,41 @@ public class LatestFloraSpeciesWidgetService extends JobService {
     private void handleActionGetLatestFloraSpecies(JobParameters jobParameters) {
         if(jobCancelled)
             return;
-//
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-//        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, LatestFloraSpeciesAppWidget.class));
-//
-//        FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
-//
-//        Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
-//                .getFloraSpeciesSuggestions("created");
-//
-//        responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
-//            @Override
-//            public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
-//                if(response.code() == 200) {
-//                    List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
-//                    jobFinished(jobParameters, false);
-//                    LatestFloraSpeciesAppWidget.getLatestFloraSpeciesWidget(getApplicationContext(), appWidgetManager, appWidgetIds, speciesList);
-//
-//                } else {
-//                    try {
-//                        Log.d(TAG, "onResponse: " + response.errorBody().string() );
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                        List<FloraSpecies> speciesList = new ArrayList<>();
-//                        LatestFloraSpeciesAppWidget.getLatestFloraSpeciesWidget(getApplicationContext(), appWidgetManager, appWidgetIds, speciesList);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
-//                Log.w("MyTag", "requestFailed", t);
-//            }
-//        });
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, LatestFloraSpeciesAppWidget.class));
+
+        FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
+
+        Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
+                .getFloraSpeciesSuggestions("created");
+
+        responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
+            @Override
+            public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
+                if(response.code() == 200) {
+                    List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
+                    jobFinished(jobParameters, false);
+                    LatestFloraSpeciesAppWidget.getLatestFloraSpeciesWidget(getApplicationContext(), appWidgetManager, appWidgetIds, speciesList);
+
+                } else {
+                    try {
+                        Log.d(TAG, "onResponse: " + response.errorBody().string() );
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        List<FloraSpecies> speciesList = new ArrayList<>();
+                        LatestFloraSpeciesAppWidget.getLatestFloraSpeciesWidget(getApplicationContext(), appWidgetManager, appWidgetIds, speciesList);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
+                List<FloraSpecies> speciesList = new ArrayList<>();
+                LatestFloraSpeciesAppWidget.getLatestFloraSpeciesWidget(getApplicationContext(), appWidgetManager, appWidgetIds, speciesList);
+                Log.w("MyTag", "requestFailed", t);
+            }
+        });
 
     }
 }
