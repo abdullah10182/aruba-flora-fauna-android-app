@@ -17,4 +17,5 @@
     <string name="add_widget">Add widget</string>
     <string name="widget_title">Latest 5 Flora Additions</string>
     <string name="network_error">Something went wrong please try again:</string>
+    <string name="menu_download">Download for offline usage</string>
 </resources>

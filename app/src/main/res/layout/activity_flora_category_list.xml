@@ -52,15 +52,33 @@
                     android:src="@drawable/ic_logo"/>
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_search_circle_bg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                app:layout_collapseMode="pin"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="9dp"
-                android:src="@drawable/ic_search_circle"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/black_gradient_text_bg"
+                android:rotation="180"/>
+
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_search_circle_bg"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                app:layout_collapseMode="pin"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="53dp"-->
+<!--                android:src="@drawable/ic_search_circle"/>-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_overflow_menu_circle_bg"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                app:layout_collapseMode="pin"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="9dp"-->
+<!--                android:src="@drawable/ic_search_circle"/>-->
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

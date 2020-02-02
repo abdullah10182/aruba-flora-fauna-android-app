@@ -6,10 +6,53 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/activity_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id= "@+id/activity_content">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/ll_download_indicator_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ProgressBar
+            android:id="@+id/pb_download_indicator"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="Downloading: " />
+
+            <TextView
+                android:id="@+id/tv_download_text_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ProgressBar
         android:layout_width="wrap_content"

@@ -3,6 +3,8 @@ package com.triangon.aruba_flora_fauna.repositories;
 import android.content.Context;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.triangon.aruba_flora_fauna.models.FloraCategory;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
 import com.triangon.aruba_flora_fauna.persistence.AffDatabase;
@@ -63,27 +65,30 @@ public class FloraSpeciesRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<FloraSpecies> data) {
-                //return true; // always query the network for now TEMP
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-                int lastRefresh = 0;
-                if(data.size() > 0){
-                    lastRefresh = data.get(0).getTimestamp();
-                } else {
-                    return true;
-                }
-
-                if((currentTime - lastRefresh) >= Constants.FLORA_CATEGORY_REFRESH_TIME){
-                    Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
-                    return true;
-                }
-                Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + false);
-                return false;
+                return true; // always query the network for now TEMP
+//                int currentTime = (int) (System.currentTimeMillis() / 1000);
+//                int lastRefresh = 0;
+//                if(data.size() > 0){
+//                    lastRefresh = data.get(0).getTimestamp();
+//                } else {
+//                    return true;
+//                }
+//
+//                if((currentTime - lastRefresh) >= Constants.FLORA_CATEGORY_REFRESH_TIME){
+//                    Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
+//                    return true;
+//                }
+//                Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + false);
+//                return false;
             }
 
             @NonNull
             @Override
             protected LiveData<List<FloraSpecies>> loadFromDb() {
-                return floraSpeciesDao.getFloraSpecies(category, speciesId, searchQuery);
+                if(category == "all")
+                    return floraSpeciesDao.getAllFloraSpecies();
+                else
+                    return floraSpeciesDao.getFloraSpecies(category, speciesId, searchQuery);
             }
 
             @NonNull

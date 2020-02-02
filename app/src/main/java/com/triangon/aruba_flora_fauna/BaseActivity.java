@@ -2,62 +2,85 @@ package com.triangon.aruba_flora_fauna;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.triangon.aruba_flora_fauna.activities.FloraCategoryListActivity;
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesDetailActivity;
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesListActivity;
+import com.triangon.aruba_flora_fauna.dialogs.DownloadDataDialog;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
-import com.triangon.aruba_flora_fauna.requests.FloraSpeciesApi;
-import com.triangon.aruba_flora_fauna.requests.ServiceGenerator;
-import com.triangon.aruba_flora_fauna.requests.responses.FloraSpeciesListResponse;
+import com.triangon.aruba_flora_fauna.models.ImageBundle;
+import com.triangon.aruba_flora_fauna.utils.Resource;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
-import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesAppWidget;
-import com.triangon.aruba_flora_fauna.widgets.LatestFloraSpeciesWidgetService;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import static com.triangon.aruba_flora_fauna.viewmodels.FloraCategoryListViewModel.NO_RESULTS;
 
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements DownloadDataDialog.DownloadDataDialogListener {
 
     private static final String TAG = "BaseActivity";
     public ProgressBar mProgressBar;
     public MaterialSearchView mSearchView;
     private String[] mSuggestions;
     private FloraSpeciesSuggestionsViewModel mFloraSpeciesSuggestionsViewModel;
+    private FloraSpeciesListViewModel mFloraSpeciesListViewModel;
     @Nullable
     private ProgressBar mSearchProgressBar;
     private boolean mSearchInitiated = false;
-    private static final String LATEST_SPECIES_PREFERENCES = "myPrefrences";
+    private static final String FIRST_TIME_OPEN_PREFERENCES = "myPrefrences";
     private FirebaseAnalytics mFirebaseAnalytics;
+    private AlertDialog mDownloadDialog;
+    private TextView mDownloadTextIndicator;
+    private ProgressBar mDownloadProgressBarIndicator;
+    private LinearLayout mDownloadIndicatorWrapper;
+    int mSpeciesIndex = 0;
+    int mAdditionalImagesIndex = 0;
+    String mCurrentPreloadImageSize;
+    List<FloraSpecies> mSpeciesDownload;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,8 +89,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         mFloraSpeciesSuggestionsViewModel = ViewModelProviders.of(this).get(FloraSpeciesSuggestionsViewModel.class);
+        mFloraSpeciesListViewModel = ViewModelProviders.of(this).get(FloraSpeciesListViewModel.class);
+
+        setFirstTimeAppOpenedInSharedPreferences();
+        //openDownloadDialog();
+
         //LatestFloraSpeciesWidgetService.startActionGetLatestFloraSpecies(this);
-        //subscribeObservers();
         //initLatestSpeciesStorage();
     }
 
@@ -77,6 +104,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         ConstraintLayout constraintLayout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
         FrameLayout frameLayout = constraintLayout.findViewById(R.id.activity_content);
         mProgressBar = constraintLayout.findViewById(R.id.progress_bar);
+        mDownloadIndicatorWrapper = constraintLayout.findViewById(R.id.ll_download_indicator_wrapper);
+        mDownloadTextIndicator = constraintLayout.findViewById(R.id.tv_download_text_indicator);
+        mDownloadProgressBarIndicator = constraintLayout.findViewById(R.id.pb_download_indicator);
 
         getLayoutInflater().inflate(layoutResID, frameLayout, true);
         super.setContentView(constraintLayout);
@@ -125,6 +155,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_offline_download:
+                openDownloadDialog();
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
     private void getFloraSpeciesSuggestionsApi() {
         mSearchInitiated = true;
         mSearchProgressBar.setVisibility(View.VISIBLE);
@@ -132,35 +173,62 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void subscribeObservers() {
-        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestions().observe(this, new Observer<List<FloraSpecies>>() {
+//        mFloraSpeciesSuggestionsViewModel.getFloraSpeciesSuggestions().observe(this, new Observer<List<FloraSpecies>>() {
+//            @Override
+//            public void onChanged(List<FloraSpecies> floraSpecies) {
+//                if(floraSpecies != null && mSearchProgressBar != null) {
+//                    mSearchProgressBar.setVisibility(View.GONE);
+//                    ArrayList<String> suggestionsArrList = new ArrayList<String>();
+//                    for(FloraSpecies species : floraSpecies) {
+//                        suggestionsArrList.add(species.getCommonName());
+//                        if(species.getPapiamentoName() != null && !species.getPapiamentoName().trim().equals(species.getCommonName().trim()))
+//                            suggestionsArrList.add(species.getPapiamentoName() + " (" + species.getCommonName() + ")");
+//                    }
+//
+//                    mSuggestions = suggestionsArrList.toArray(new String[suggestionsArrList.size()]);
+//
+//                    if(mSuggestions.length > 0 && mSearchView != null)
+//                        mSearchView.setSuggestions(mSuggestions);
+//
+//                    mSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            mSearchView.closeSearch();
+//                            String query = (String) adapterView.getItemAtPosition(i);
+//                            String selectedId = getSelectedId(floraSpecies, query);
+//                            Intent intent = new Intent(getApplicationContext(), FloraSpeciesDetailActivity.class);
+//                            intent.putExtra("selectedSpeciesId", selectedId);
+//                            intent.putExtra("selectedSpeciesName", query);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
+        mFloraSpeciesListViewModel.getFloraSpecies().observe(this, new Observer<Resource<List<FloraSpecies>>>() {
             @Override
-            public void onChanged(List<FloraSpecies> floraSpecies) {
-                if(floraSpecies != null && mSearchProgressBar != null) {
-                    mSearchProgressBar.setVisibility(View.GONE);
-                    ArrayList<String> suggestionsArrList = new ArrayList<String>();
-                    for(FloraSpecies species : floraSpecies) {
-                        suggestionsArrList.add(species.getCommonName());
-                        if(species.getPapiamentoName() != null && !species.getPapiamentoName().trim().equals(species.getCommonName().trim()))
-                            suggestionsArrList.add(species.getPapiamentoName() + " (" + species.getCommonName() + ")");
-                    }
+            public void onChanged(Resource<List<FloraSpecies>> listResource) {
+                if(listResource != null) {
+                    Log.d(TAG, "onChanged: status" + listResource.status);
 
-                    mSuggestions = suggestionsArrList.toArray(new String[suggestionsArrList.size()]);
+                    if(listResource.data != null) {
+                        switch (listResource.status) {
+                            case LOADING: {
 
-                    if(mSuggestions.length > 0 && mSearchView != null)
-                        mSearchView.setSuggestions(mSuggestions);
-
-                    mSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            mSearchView.closeSearch();
-                            String query = (String) adapterView.getItemAtPosition(i);
-                            String selectedId = getSelectedId(floraSpecies, query);
-                            Intent intent = new Intent(getApplicationContext(), FloraSpeciesDetailActivity.class);
-                            intent.putExtra("selectedSpeciesId", selectedId);
-                            intent.putExtra("selectedSpeciesName", query);
-                            startActivity(intent);
+                            }
+                            case ERROR: {
+                                //TODO error handling
+                                break;
+                            }
+                            case SUCCESS: {
+                                mSpeciesDownload = listResource.data;
+                                mCurrentPreloadImageSize = "small";
+                                preloadImageData();
+                                break;
+                            }
                         }
-                    });
+                    }
                 }
             }
         });
@@ -188,55 +256,141 @@ public abstract class BaseActivity extends AppCompatActivity {
         mSearchView.showSearch();
     }
 
-    private void initLatestSpeciesStorage() {
-//        SharedPreferences prefs = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE);
-//        long latestFloraSpeciesSavedTime = prefs.getLong("latestFloraSpeciesSavedTime",0);
-//        long currentTimeMillis = System.currentTimeMillis();
-//
-//
-//        if(latestFloraSpeciesSavedTime == 0 || currentTimeMillis - latestFloraSpeciesSavedTime > 1800000) {
-//            FloraSpeciesApi floraSpeciesApi = ServiceGenerator.getFloraSpeciesApi();
-//
-//            Call<FloraSpeciesListResponse> responseCall = floraSpeciesApi
-//                    .getFloraSpeciesSuggestions("created");
-//
-//            responseCall.enqueue(new Callback<FloraSpeciesListResponse>() {
-//                @Override
-//                public void onResponse(Call<FloraSpeciesListResponse> call, Response<FloraSpeciesListResponse> response) {
-//                    if(response.code() == 200) {
-//                        List<FloraSpecies> speciesList = new ArrayList<>(response.body().getFloraSpecies());
-//                        setLatestSpeciesDataInSharedPreferences(speciesList);
-//
-//                    } else {
-//                        try {
-//                            Log.d(TAG, "onResponse: " + response.errorBody().string() );
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<FloraSpeciesListResponse> call, Throwable t) {
-//
-//                }
-//            });
-//        }
+    public void setFirstTimeAppOpenedInSharedPreferences() {
+        SharedPreferences prefs = getSharedPreferences(FIRST_TIME_OPEN_PREFERENCES, MODE_PRIVATE);
+        if(prefs.contains("appOpenedFirstTime")) {
+            boolean appOpenedFirstTime = prefs.getBoolean("appOpenedFirstTime", false);
+        } else {
+            SharedPreferences.Editor editor = getSharedPreferences(FIRST_TIME_OPEN_PREFERENCES, MODE_PRIVATE).edit();
+            editor.putBoolean("appOpenedFirstTime", true);
+            editor.commit();
+            openDownloadDialog();
+        }
     }
 
-    public void setLatestSpeciesDataInSharedPreferences(List<FloraSpecies> latestFloraSpecies) {
-        SharedPreferences.Editor editor = getSharedPreferences(LATEST_SPECIES_PREFERENCES, MODE_PRIVATE).edit();
+    public void openDownloadDialog() {
+        DownloadDataDialog downloadDataDialog = new DownloadDataDialog();
+        downloadDataDialog.show(getSupportFragmentManager(), "download dialog");
+    }
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        String jsonLatestFloraSpecies = gson.toJson(latestFloraSpecies);
-        //set time
-        long currentTimeMillis = System.currentTimeMillis();
+    @Override
+    public void onYesDownloadClicked() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(false);
+//        builder.setView(R.layout.layout_loading_dialog);
+//        mDownloadDialog = builder.create();
+//        mDownloadDialog.setCancelable(true);
+//        mDownloadDialog.show();
 
-        editor.putString("latestFloraSpecies", jsonLatestFloraSpecies);
-        editor.putLong("latestFloraSpeciesSavedTime", currentTimeMillis);
-        editor.commit();
+        mDownloadIndicatorWrapper.setVisibility(View.VISIBLE);
+        mDownloadTextIndicator.setText("Starting...");
+
+        subscribeObservers();
+        mFloraSpeciesListViewModel.getFloraSpeciesApi("all", null, null);
+    }
+
+    private void preloadImageData() {
+        FloraSpecies floraSpecies = mSpeciesDownload.get(mSpeciesIndex);
+        List<ImageBundle> images = floraSpecies.getAdditionalImages();
+        String imageUrl = "";
+
+        if(mCurrentPreloadImageSize == "small" || mCurrentPreloadImageSize == "medium"){
+
+            for (ImageBundle image : images) {
+                if(mCurrentPreloadImageSize == "small"){
+                    imageUrl = image.getImageSmall();
+                    preloadImageGlide(imageUrl, images.size());
+                }
+                else if(mCurrentPreloadImageSize == "medium") {
+                    imageUrl = image.getImageMedium();
+                    preloadImageGlide(imageUrl, images.size());
+                }
+            }
+        } else if(mCurrentPreloadImageSize == "thumbnail") {
+            ImageBundle image = mSpeciesDownload.get(mSpeciesIndex).getMainImage();
+            imageUrl = image.getImageThumbnail();
+            preloadImageGlide(imageUrl, images.size());
+        }
+
+
+
+    }
+
+    private void preloadImageGlide(String imageUrl, int imageSize) {
+        RequestManager rm = Glide.with(getApplicationContext());
+        rm.load(imageUrl)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        imageDone(imageSize);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        imageDone(imageSize);
+                        return false;
+                    }
+                })
+                .submit();
+    }
+
+    private void imageDone(int imageSize) {
+        System.out.println("mSpeciesIndex " + mSpeciesIndex);
+        System.out.println("mAdditionalImagesIndex " + mAdditionalImagesIndex);
+        System.out.println("mCurrentPreloadImageSize " + mCurrentPreloadImageSize);
+
+        if(imageSize-1 == mAdditionalImagesIndex && mCurrentPreloadImageSize == "small") {
+            mAdditionalImagesIndex = 0;
+            mCurrentPreloadImageSize = "medium";
+            if(mSpeciesIndex < mSpeciesDownload.size())
+                preloadImageData();
+        } else if (imageSize-1 == mAdditionalImagesIndex && mCurrentPreloadImageSize == "medium") {
+            mAdditionalImagesIndex = 0;
+            mCurrentPreloadImageSize = "thumbnail";
+            if(mSpeciesIndex < mSpeciesDownload.size())
+                preloadImageData();
+        } else if (mCurrentPreloadImageSize == "thumbnail") {
+            //mAdditionalImagesIndex = 0;
+            mCurrentPreloadImageSize = "small";
+            mSpeciesIndex++;
+            updateIndicatorText();
+            if(mSpeciesIndex < mSpeciesDownload.size())
+                preloadImageData();
+        }
+        else {
+            mAdditionalImagesIndex++;
+        }
+    }
+
+    private void updateIndicatorText(){
+        float speciesSize = mSpeciesDownload.size()-1;
+        float speciesIndex = mSpeciesIndex;
+        float percentage = ( speciesIndex / speciesSize ) * 100;
+
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if(percentage >= 100) {
+                    mDownloadTextIndicator.setText("Done!");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //mDownloadDialog.dismiss();
+                            mDownloadIndicatorWrapper.setVisibility(View.GONE);
+                            mSpeciesIndex = 0;
+                            Toast.makeText(BaseActivity.this, "Data downloaded for offline usage.", Toast.LENGTH_LONG).show();
+                        }
+                    }, 500);
+
+                } else {
+                    mDownloadTextIndicator.setText(Integer.toString((int) percentage)  + "%");
+                    mDownloadProgressBarIndicator.setProgress((int) percentage);
+
+                }
+            }
+        });
+
     }
 
 }

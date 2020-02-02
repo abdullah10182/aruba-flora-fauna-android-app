@@ -68,6 +68,9 @@ public interface FloraSpeciesDao {
             "ORDER BY common_name ASC")
     LiveData<List<FloraSpecies>> getFloraSpecies(String category, String speciesId, String searchQuery);
 
+    @Query("SELECT * FROM flora_species")
+    LiveData<List<FloraSpecies>> getAllFloraSpecies();
+
 
     @Query("SELECT * from flora_species WHERE id = :id")
     LiveData<FloraSpecies> getFloraspecies(String id);

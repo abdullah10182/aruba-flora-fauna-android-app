@@ -4,11 +4,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.triangon.aruba_flora_fauna.R;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +26,13 @@ import com.triangon.aruba_flora_fauna.BaseActivity;
 import com.triangon.aruba_flora_fauna.adapters.FloraSpeciesRecyclerAdapter;
 import com.triangon.aruba_flora_fauna.adapters.OnFloraSpeciesListener;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
+import com.triangon.aruba_flora_fauna.models.ImageBundle;
 import com.triangon.aruba_flora_fauna.utils.Resource;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -128,15 +135,6 @@ public class FloraSpeciesListActivity extends BaseActivity implements OnFloraSpe
                         Glide.with(this), mAdapter, sizeProvider, 20);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-//        ViewPreloadSizeProvider<String> viewPreloader = new ViewPreloadSizeProvider<>();
-//        mAdapter = new FloraSpeciesRecyclerAdapter(this, initGlide(), viewPreloader);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<>(
-//                Glide.with(this),
-//                mAdapter,
-//                viewPreloader,
-//                20);
 
         mRecyclerView.addOnScrollListener(preloader);
 

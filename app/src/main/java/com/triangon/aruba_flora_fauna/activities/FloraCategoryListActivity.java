@@ -55,8 +55,10 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
     public RelativeLayout mLogoHero;
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
-    @BindView(R.id.iv_search_circle_bg)
-    public ImageView mSearchIconCircleBg;
+//    @BindView(R.id.iv_search_circle_bg)
+//    public ImageView mSearchIconCircleBg;
+//    @BindView(R.id.iv_overflow_menu_circle_bg)
+//    public ImageView mOverflowMenuIconCircleBg;
     @BindView(R.id.fl_error_screen)
     public FrameLayout mErrorScreen;
     @BindView(R.id.btn_retry_call)
@@ -227,10 +229,13 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
                     //if collapses
+
                     if(mLogoToolbar.getVisibility() == View.GONE)
                         mLogoToolbar.setVisibility(View.VISIBLE);
 
-                    mToolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
+                    //show custom menu elements
+//                    mToolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
+//                    mToolbar.findViewById(R.id.action_offline_download).setVisibility(View.VISIBLE);
 
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
@@ -239,16 +244,22 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 0 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", 0 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 0.6f ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 0.6f ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 0f ).setDuration(400)
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", 0 ).setDuration(400)
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 0.6f ).setDuration(400),
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 0.6f ).setDuration(400),
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 0f ).setDuration(400)
                     );
                     set.start();
+                    //mSearchIconCircleBg.setClickable(false);
                 } else if (verticalOffset == 0) {
                     // If expanded, then do this
-                    if(mToolbar.findViewById(R.id.action_search) != null)
-                        mToolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
+
+                    //hide custom menu elements
+//                    if(mToolbar.findViewById(R.id.action_search) != null)
+//                        mToolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
+//                    if(mToolbar.findViewById(R.id.action_offline_download) != null)
+//                        mToolbar.findViewById(R.id.action_offline_download).setVisibility(View.GONE);
+
                     AnimatorSet set = new AnimatorSet();
                     set.playTogether(
                             ObjectAnimator.ofFloat(mLogoHero, "alpha", 1f).setDuration(400),
@@ -256,28 +267,33 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleX", 1.5f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "scaleY", 1.5f ).setDuration(400),
                             ObjectAnimator.ofFloat(mLogoToolbar, "translationX", 150 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", -60 ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 1f ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 1f ).setDuration(400),
-                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 1f ).setDuration(400)
-
-
+                            ObjectAnimator.ofFloat(mLogoToolbar, "translationY", -60 ).setDuration(400)
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleX", 1f ).setDuration(400),
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "scaleY", 1f ).setDuration(400),
+//                            ObjectAnimator.ofFloat(mSearchIconCircleBg, "alpha", 1f ).setDuration(400)
                     );
                     set.start();
+                    //mSearchIconCircleBg.setClickable(true);
                 }
             }
         });
     }
 
     public void initSearchButton() {
-        mSearchIconCircleBg.bringToFront();
-        mSearchIconCircleBg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("test");
-                openSearch();
-            }
-        });
+//        mSearchIconCircleBg.bringToFront();
+//        mSearchIconCircleBg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openSearch();
+//            }
+//        });
+//
+//        mOverflowMenuIconCircleBg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openOptionsMenu();
+//            }
+//        });
     }
 
     public void showErrorScreen(Boolean show){
