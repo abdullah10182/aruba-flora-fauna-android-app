@@ -65,21 +65,21 @@ public class FloraSpeciesRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<FloraSpecies> data) {
-                return true; // always query the network for now TEMP
-//                int currentTime = (int) (System.currentTimeMillis() / 1000);
-//                int lastRefresh = 0;
-//                if(data.size() > 0){
-//                    lastRefresh = data.get(0).getTimestamp();
-//                } else {
-//                    return true;
-//                }
-//
-//                if((currentTime - lastRefresh) >= Constants.FLORA_CATEGORY_REFRESH_TIME){
-//                    Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
-//                    return true;
-//                }
-//                Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + false);
-//                return false;
+                //return true; // always query the network for now TEMP
+                int currentTime = (int) (System.currentTimeMillis() / 1000);
+                int lastRefresh = 0;
+                if(data.size() > 0){
+                    lastRefresh = data.get(0).getTimestamp();
+                } else {
+                    return true;
+                }
+
+                if((currentTime - lastRefresh) >= Constants.FLORA_CATEGORY_REFRESH_TIME){
+                    Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + true);
+                    return true;
+                }
+                Log.d(TAG, "shouldFetch: SHOULD REFRESH?! " + false);
+                return false;
             }
 
             @NonNull

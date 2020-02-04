@@ -35,8 +35,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.triangon.aruba_flora_fauna.activities.FloraCategoryListActivity;
-import com.triangon.aruba_flora_fauna.activities.FloraSpeciesDetailActivity;
+
 import com.triangon.aruba_flora_fauna.activities.FloraSpeciesListActivity;
 import com.triangon.aruba_flora_fauna.dialogs.DownloadDataDialog;
 import com.triangon.aruba_flora_fauna.models.FloraSpecies;
@@ -45,8 +44,6 @@ import com.triangon.aruba_flora_fauna.utils.Resource;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesListViewModel;
 import com.triangon.aruba_flora_fauna.viewmodels.FloraSpeciesSuggestionsViewModel;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -218,7 +215,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
 
                             }
                             case ERROR: {
-                                //TODO error handling
+                                mSpeciesIndex = 0;
+                                //mDownloadIndicatorWrapper.setVisibility(View.GONE);
+                                if(listResource.message != null ) {
+                                    System.out.println("--->" + listResource.message);
+                                    Toast.makeText(BaseActivity.this, "Something went wrong please try again.", Toast.LENGTH_LONG).show();
+                                    //mDownloadIndicatorWrapper.setVisibility(View.GONE);
+                                }
                                 break;
                             }
                             case SUCCESS: {
@@ -376,9 +379,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            mSpeciesIndex = 0;
                             //mDownloadDialog.dismiss();
                             mDownloadIndicatorWrapper.setVisibility(View.GONE);
-                            mSpeciesIndex = 0;
                             Toast.makeText(BaseActivity.this, "Data downloaded for offline usage.", Toast.LENGTH_LONG).show();
                         }
                     }, 500);
@@ -386,11 +389,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
                 } else {
                     mDownloadTextIndicator.setText(Integer.toString((int) percentage)  + "%");
                     mDownloadProgressBarIndicator.setProgress((int) percentage);
-
                 }
             }
         });
-
     }
-
 }
