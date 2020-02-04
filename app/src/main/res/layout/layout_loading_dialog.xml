@@ -27,6 +27,8 @@
             android:gravity="left|center_vertical"
             android:id="@+id/tv_download_text_indicator"
             android:text="" />
+
+
     </LinearLayout>
 
 </LinearLayout>

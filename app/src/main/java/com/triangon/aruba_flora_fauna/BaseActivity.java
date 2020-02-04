@@ -76,8 +76,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
     private LinearLayout mDownloadIndicatorWrapper;
     int mSpeciesIndex = 0;
     int mAdditionalImagesIndex = 0;
-    String mCurrentPreloadImageSize;
+    String mCurrentPreloadImageSize; //small, medium etc
     List<FloraSpecies> mSpeciesDownload;
+    MenuItem mDownloadActionMenuItem;
+    TextView mCancelDownload;
+    boolean mAllowedToDownload = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,6 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
         MenuItem item = menu.findItem(R.id.action_search);
         mSearchView = findViewById(R.id.search_view);
         mSearchView.setMenuItem(item);
+        mDownloadActionMenuItem = menu.getItem(1);
 
         mSearchProgressBar = findViewById(R.id.pb_search_loader);
 
@@ -215,16 +219,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
 
                             }
                             case ERROR: {
-                                mSpeciesIndex = 0;
-                                //mDownloadIndicatorWrapper.setVisibility(View.GONE);
                                 if(listResource.message != null ) {
+                                    mSpeciesIndex = 0;
+                                    mDownloadActionMenuItem.setEnabled(true);
+                                    mDownloadIndicatorWrapper.setVisibility(View.GONE);
                                     System.out.println("--->" + listResource.message);
                                     Toast.makeText(BaseActivity.this, "Something went wrong please try again.", Toast.LENGTH_LONG).show();
-                                    //mDownloadIndicatorWrapper.setVisibility(View.GONE);
                                 }
                                 break;
                             }
                             case SUCCESS: {
+                                mDownloadActionMenuItem.setEnabled(false);
+                                mDownloadIndicatorWrapper.setVisibility(View.VISIBLE);
                                 mSpeciesDownload = listResource.data;
                                 mCurrentPreloadImageSize = "small";
                                 preloadImageData();
@@ -278,45 +284,58 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
 
     @Override
     public void onYesDownloadClicked() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setCancelable(false);
-//        builder.setView(R.layout.layout_loading_dialog);
-//        mDownloadDialog = builder.create();
-//        mDownloadDialog.setCancelable(true);
-//        mDownloadDialog.show();
-
+        mDownloadActionMenuItem.setEnabled(false);
         mDownloadIndicatorWrapper.setVisibility(View.VISIBLE);
         mDownloadTextIndicator.setText("Starting...");
 
+        initCancelDownloadButton();
+        mAllowedToDownload = true;
         subscribeObservers();
         mFloraSpeciesListViewModel.getFloraSpeciesApi("all", null, null);
     }
 
+    private void initCancelDownloadButton() {
+        mCancelDownload = findViewById(R.id.tv_cancel_download);
+        mCancelDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAllowedToDownload = false;
+                mSpeciesIndex = 0;
+                mAdditionalImagesIndex = 0;
+                mDownloadIndicatorWrapper.setVisibility(View.GONE);
+                mDownloadActionMenuItem.setEnabled(true);
+                mDownloadProgressBarIndicator.setProgress(0);
+                mCurrentPreloadImageSize="small";
+            }
+        });
+    }
+
     private void preloadImageData() {
-        FloraSpecies floraSpecies = mSpeciesDownload.get(mSpeciesIndex);
-        List<ImageBundle> images = floraSpecies.getAdditionalImages();
-        String imageUrl = "";
+        if(mSpeciesDownload.size() > 0 && mSpeciesIndex <= mSpeciesDownload.size()) {
+            FloraSpecies floraSpecies = mSpeciesDownload.get(mSpeciesIndex);
+            List<ImageBundle> images = floraSpecies.getAdditionalImages();
+            String imageUrl = "";
 
-        if(mCurrentPreloadImageSize == "small" || mCurrentPreloadImageSize == "medium"){
+            if(mAllowedToDownload) {
+                if(mCurrentPreloadImageSize == "small" || mCurrentPreloadImageSize == "medium"){
 
-            for (ImageBundle image : images) {
-                if(mCurrentPreloadImageSize == "small"){
-                    imageUrl = image.getImageSmall();
-                    preloadImageGlide(imageUrl, images.size());
-                }
-                else if(mCurrentPreloadImageSize == "medium") {
-                    imageUrl = image.getImageMedium();
+                    for (ImageBundle image : images) {
+                        if(mCurrentPreloadImageSize == "small"){
+                            imageUrl = image.getImageSmall();
+                            preloadImageGlide(imageUrl, images.size());
+                        }
+                        else if(mCurrentPreloadImageSize == "medium") {
+                            imageUrl = image.getImageMedium();
+                            preloadImageGlide(imageUrl, images.size());
+                        }
+                    }
+                } else if(mCurrentPreloadImageSize == "thumbnail") {
+                    ImageBundle image = mSpeciesDownload.get(mSpeciesIndex).getMainImage();
+                    imageUrl = image.getImageThumbnail();
                     preloadImageGlide(imageUrl, images.size());
                 }
             }
-        } else if(mCurrentPreloadImageSize == "thumbnail") {
-            ImageBundle image = mSpeciesDownload.get(mSpeciesIndex).getMainImage();
-            imageUrl = image.getImageThumbnail();
-            preloadImageGlide(imageUrl, images.size());
         }
-
-
-
     }
 
     private void preloadImageGlide(String imageUrl, int imageSize) {
@@ -379,10 +398,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            mDownloadActionMenuItem.setEnabled(true);
                             mSpeciesIndex = 0;
                             //mDownloadDialog.dismiss();
                             mDownloadIndicatorWrapper.setVisibility(View.GONE);
-                            Toast.makeText(BaseActivity.this, "Data downloaded for offline usage.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(BaseActivity.this, "Data downloaded for offline usage.", Toast.LENGTH_SHORT).show();
                         }
                     }, 500);
 
