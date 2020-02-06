@@ -15,7 +15,7 @@ public class ApiResponse<T> {
 
     public ApiResponse<T> create(Throwable error){
         if(error.getMessage() != null)
-            return new ApiErrorResponse<>(error.getMessage().equals("") ? error.getMessage() : "Unknown error\nCheck network connection");
+            return new ApiErrorResponse<>(error.getMessage().equals("") ? error.getMessage() : "Check network connection");
         else
             return new ApiErrorResponse<>("Error");
     }

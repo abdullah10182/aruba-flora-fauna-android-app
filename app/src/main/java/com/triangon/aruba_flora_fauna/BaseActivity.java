@@ -81,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
     MenuItem mDownloadActionMenuItem;
     TextView mCancelDownload;
     boolean mAllowedToDownload = true;
+    boolean mDownloading = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -219,18 +220,19 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
 
                             }
                             case ERROR: {
-                                if(listResource.message != null ) {
+                                if(listResource.message != null && !mDownloading) {
                                     mSpeciesIndex = 0;
                                     mDownloadActionMenuItem.setEnabled(true);
                                     mDownloadIndicatorWrapper.setVisibility(View.GONE);
                                     System.out.println("--->" + listResource.message);
-                                    Toast.makeText(BaseActivity.this, "Something went wrong please try again.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BaseActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             }
                             case SUCCESS: {
-                                mDownloadActionMenuItem.setEnabled(false);
-                                mDownloadIndicatorWrapper.setVisibility(View.VISIBLE);
+                                if(mAllowedToDownload)
+                                    mDownloadActionMenuItem.setEnabled(false);
+                                //mDownloadIndicatorWrapper.setVisibility(View.VISIBLE);
                                 mSpeciesDownload = listResource.data;
                                 mCurrentPreloadImageSize = "small";
                                 preloadImageData();
@@ -299,15 +301,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
         mCancelDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAllowedToDownload = false;
-                mSpeciesIndex = 0;
-                mAdditionalImagesIndex = 0;
-                mDownloadIndicatorWrapper.setVisibility(View.GONE);
-                mDownloadActionMenuItem.setEnabled(true);
-                mDownloadProgressBarIndicator.setProgress(0);
-                mCurrentPreloadImageSize="small";
+                resetDownload();
             }
+
         });
+    }
+
+    private void resetDownload() {
+        mAllowedToDownload = false;
+        mSpeciesIndex = 0;
+        mAdditionalImagesIndex = 0;
+        mDownloadIndicatorWrapper.setVisibility(View.GONE);
+        mDownloadActionMenuItem.setEnabled(true);
+        mDownloadProgressBarIndicator.setProgress(0);
+        mCurrentPreloadImageSize="small";
+        mDownloading = false;
     }
 
     private void preloadImageData() {
@@ -344,6 +352,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        //cancelSynchronous();
                         imageDone(imageSize);
                         return false;
                     }
@@ -362,6 +371,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
         System.out.println("mAdditionalImagesIndex " + mAdditionalImagesIndex);
         System.out.println("mCurrentPreloadImageSize " + mCurrentPreloadImageSize);
 
+        mDownloading = true;
+
+        if(mAdditionalImagesIndex >= imageSize) {
+            mAdditionalImagesIndex = 0;
+            mCurrentPreloadImageSize="small";
+        }
+
         if(imageSize-1 == mAdditionalImagesIndex && mCurrentPreloadImageSize == "small") {
             mAdditionalImagesIndex = 0;
             mCurrentPreloadImageSize = "medium";
@@ -373,7 +389,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
             if(mSpeciesIndex < mSpeciesDownload.size())
                 preloadImageData();
         } else if (mCurrentPreloadImageSize == "thumbnail") {
-            //mAdditionalImagesIndex = 0;
+            mAdditionalImagesIndex = 0;
             mCurrentPreloadImageSize = "small";
             mSpeciesIndex++;
             updateIndicatorText();
@@ -385,6 +401,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
         }
     }
 
+    private void cancelSynchronous() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                resetDownload();
+                Toast.makeText(BaseActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void updateIndicatorText(){
         float speciesSize = mSpeciesDownload.size()-1;
         float speciesIndex = mSpeciesIndex;
@@ -394,6 +420,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Download
             public void run() {
                 if(percentage >= 100) {
                     mDownloadTextIndicator.setText("Done!");
+                    mDownloading = false;
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
