@@ -95,6 +95,10 @@ dependencies {
     // Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
+    //splash screen
+    implementation 'gr.pantrif:easy-android-splash-screen:0.0.1'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'
