@@ -15,7 +15,7 @@
    viewBox="0 0 250 209.96967"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="aff-logo-with-text.svg">
   <defs
      id="defs2">
@@ -185,15 +185,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.65124508"
-     inkscape:cx="461.88444"
+     inkscape:cx="160.92247"
      inkscape:cy="374.3556"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="text1189"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1680"
+     inkscape:window-height="1005"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      units="px"
      fit-margin-top="0"
@@ -209,7 +209,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -234,19 +234,51 @@
     <g
        id="g5006"
        transform="matrix(2.6101972,0,0,2.6101972,-1408.4593,-218.19316)">
-      <text
-         inkscape:export-ydpi="180"
-         inkscape:export-xdpi="180"
-         xml:space="preserve"
+      <g
+         aria-label="ARUBA FLORA"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.84558487px;line-height:1.25;font-family:'Sitka Subheading';-inkscape-font-specification:'Sitka Subheading';letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:none;stroke-width:0.49613962"
-         x="550.20996"
-         y="198.8842"
-         id="text1189"><tspan
-           sodipodi:role="line"
-           id="tspan1187"
-           x="550.20996"
-           y="198.8842"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962">ARUBA FLORA</tspan></text>
+         id="text1189">
+        <path
+           d="m 559.8905,198.8842 h -2.55822 l -0.3973,-1.88959 h -3.18809 l -0.44575,1.88959 h -2.55822 l 3.45941,-12.10309 h 2.65513 z m -3.33344,-3.84702 -1.06593,-5.28117 h -0.0388 l -1.23066,5.28117 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path868" />
+        <path
+           d="m 568.94117,198.8842 h -2.6745 l -2.10278,-5.98856 h -0.0388 v 5.98856 h -2.60667 v -12.10309 h 3.40127 q 1.01747,0 2.02525,0.40699 1.01748,0.40699 1.44385,1.26942 0.43606,0.86243 0.43606,1.79269 0,1.12407 -0.48451,1.85083 -0.48452,0.71708 -1.54075,1.30818 z m -4.81604,-6.66688 q 1.27911,0 1.61826,-0.4942 0.33916,-0.50389 0.33916,-1.26942 0,-1.73455 -1.42446,-1.73455 h -0.53296 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path870" />
+        <path
+           d="m 578.4279,195.47324 q 0,1.70548 -1.02716,2.68419 -1.01748,0.96903 -2.82955,0.96903 -1.8799,0 -2.89738,-0.9981 -1.00778,-0.99809 -1.00778,-2.85861 v -8.48864 h 2.63574 v 8.07196 q 0,0.85274 0.32947,1.31787 0.33916,0.45544 0.93995,0.45544 0.56203,0 0.88181,-0.44575 0.32947,-0.44575 0.32947,-1.20159 v -8.19793 h 2.64543 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path872" />
+        <path
+           d="m 586.3642,192.78905 q 1.05623,0.48451 1.4826,1.1919 0.42637,0.70738 0.42637,1.85083 0,1.2888 -0.93026,2.17061 -0.92057,0.88181 -2.26751,0.88181 h -4.33153 v -12.10309 h 3.71135 q 1.56982,0 2.56791,0.87212 1.00779,0.86243 1.00779,2.19968 0,1.0853 -0.3973,1.76362 -0.3973,0.67832 -1.26942,1.17252 z m -2.99428,-0.8915 h 0.53296 q 0.65894,0 1.04654,-0.41668 0.3973,-0.42637 0.3973,-1.13376 0,-1.62796 -1.63764,-1.62796 h -0.33916 z m 0,5.01953 0.75584,-0.0194 q 0.66862,-0.01 1.03685,-0.41668 0.36823,-0.40698 0.36823,-1.15313 0,-1.59889 -1.62796,-1.59889 h -0.53296 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path874" />
+        <path
+           d="m 598.20566,198.8842 h -2.55822 l -0.3973,-1.88959 h -3.18809 l -0.44575,1.88959 h -2.55822 l 3.45941,-12.10309 h 2.65513 z m -3.33344,-3.84702 -1.06593,-5.28117 h -0.0388 l -1.23066,5.28117 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path876" />
+        <path
+           d="m 609.75641,189.13583 h -3.06212 v 2.4807 h 2.62606 v 2.24813 h -2.62606 v 5.01954 h -2.59698 v -12.10309 h 5.6591 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path878" />
+        <path
+           d="m 617.1985,198.8842 h -5.65909 v -12.10309 h 2.59698 v 9.7193 h 3.06211 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path880" />
+        <path
+           d="m 618.15784,192.76967 q 0,-2.54853 0.55234,-3.74043 0.55234,-1.1919 1.46322,-1.85083 0.92058,-0.65894 2.31597,-0.65894 1.15314,0 1.86052,0.38761 0.70739,0.37792 1.30818,1.11438 0.61049,0.72676 0.8915,1.81207 0.28102,1.07561 0.28102,2.85862 0,3.65321 -1.22097,5.0486 -1.21128,1.38571 -3.13963,1.38571 -1.96712,0 -3.13964,-1.43416 -1.17251,-1.44384 -1.17251,-4.92263 z m 2.76171,-0.73646 v 0.77522 q 0,1.90897 0.12597,2.51946 0.12598,0.60079 0.53297,0.94964 0.41668,0.34885 0.9884,0.34885 0.46513,0 0.85274,-0.33916 0.38761,-0.33916 0.54265,-1.02716 0.15505,-0.6977 0.15505,-2.47101 0,-1.5892 -0.13567,-2.25782 -0.12597,-0.67832 -0.52327,-1.095 -0.3973,-0.41668 -0.96902,-0.41668 -0.83336,0 -1.20159,0.72677 -0.36823,0.71707 -0.36823,2.28689 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path882" />
+        <path
+           d="m 636.34639,198.8842 h -2.6745 l -2.10278,-5.98856 h -0.0388 v 5.98856 h -2.60668 v -12.10309 h 3.40127 q 1.01748,0 2.02526,0.40699 1.01747,0.40699 1.44384,1.26942 0.43607,0.86243 0.43607,1.79269 0,1.12407 -0.48452,1.85083 -0.48451,0.71708 -1.54074,1.30818 z m -4.81604,-6.66688 q 1.2791,0 1.61826,-0.4942 0.33916,-0.50389 0.33916,-1.26942 0,-1.73455 -1.42446,-1.73455 h -0.53296 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path884" />
+        <path
+           d="m 646.52113,198.8842 h -2.55822 l -0.3973,-1.88959 h -3.18809 l -0.44575,1.88959 h -2.55822 l 3.45941,-12.10309 h 2.65513 z m -3.33344,-3.84702 -1.06592,-5.28117 h -0.0388 l -1.23065,5.28117 z"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tw Cen MT Condensed';-inkscape-font-specification:'Tw Cen MT Condensed, Bold';fill:#666666;fill-opacity:1;stroke-width:0.49613962"
+           id="path886" />
+      </g>
       <path
          mask="none"
          inkscape:export-ydpi="180"
