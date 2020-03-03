@@ -69,6 +69,7 @@ public class FloraCategoryListActivity extends BaseActivity implements OnFloraCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flora_category_list);
 
+
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);

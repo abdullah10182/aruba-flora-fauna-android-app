@@ -20,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .withFullScreen()
                 .withTargetActivity(FloraCategoryListActivity.class)
                 .withSplashTimeOut(1000)
-                .withBackgroundResource(R.color.green_extra_light)
+                .withBackgroundResource(R.color.white)
                 .withLogo(R.drawable.aff_logo_with_text)
                 .create();
 
