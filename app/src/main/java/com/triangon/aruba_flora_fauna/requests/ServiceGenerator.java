@@ -19,7 +19,7 @@ public class ServiceGenerator {
     private static OkHttpClient client = new OkHttpClient.Builder()
             //establish connection to server
             .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-            //time between eachbyte read between the server
+            //time between each byte read between the server
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             //time between each byte sent to the server
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
