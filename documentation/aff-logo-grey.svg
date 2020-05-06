@@ -15,8 +15,11 @@
    viewBox="0 0 264.58333 264.58334"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="aff-logo-grey.svg">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="aff-logo-grey.svg"
+   inkscape:export-filename="/Users/abdullah/Documents/Android Dev/sandbox/android-nano-degree/projects/aruba-flora-fauna/app/src/main/res/drawable-nodpi/aff_logo_grey.png"
+   inkscape:export-xdpi="28.799997"
+   inkscape:export-ydpi="28.799997">
   <defs
      id="defs2">
     <linearGradient
@@ -185,15 +188,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32562254"
-     inkscape:cx="703.47686"
-     inkscape:cy="486.92922"
+     inkscape:cx="101.55293"
+     inkscape:cy="241.24598"
      inkscape:document-units="mm"
      inkscape:current-layer="g5030"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1680"
+     inkscape:window-height="1005"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      units="px"
      fit-margin-top="0"
@@ -210,7 +213,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -248,7 +251,7 @@
         <path
            id="path837"
            d="m 599.05892,144.47524 v 37.48292 h 14.11213 c 2.86665,-2.79128 4.86391,-6.35432 5.74754,-10.25798 0.63674,-2.59628 0.94996,-5.26144 0.93179,-7.93448 -1.5e-4,-15.78843 -9.30424,-19.29046 -20.79146,-19.29046 z"
-           style="fill:#cccccc;fill-opacity:1;stroke-width:1.8390559;stroke-miterlimit:4;stroke-dasharray:none"
+           style="fill:#e6e6e6;fill-opacity:1;stroke-width:1.8390559;stroke-miterlimit:4;stroke-dasharray:none"
            inkscape:connector-curvature="0"
            sodipodi:nodetypes="cccccc"
            inkscape:export-xdpi="180"
@@ -292,7 +295,7 @@
            inkscape:export-xdpi="180"
            sodipodi:nodetypes="cccccc"
            inkscape:connector-curvature="0"
-           style="fill:#cccccc;fill-opacity:1;stroke-width:1.8390559;stroke-miterlimit:4;stroke-dasharray:none"
+           style="fill:#e6e6e6;fill-opacity:1;stroke-width:1.8390559;stroke-miterlimit:4;stroke-dasharray:none"
            d="m 598.20516,144.63878 v 37.48292 h -14.11213 c -2.86665,-2.79128 -4.86391,-6.35432 -5.74754,-10.25798 -0.63674,-2.59628 -0.94996,-5.26144 -0.93179,-7.93447 1.5e-4,-15.78844 9.30424,-19.29047 20.79146,-19.29047 z"
            id="path4738" />
         <path
@@ -394,7 +397,7 @@
            id="path4785"
            inkscape:connector-curvature="0" />
         <circle
-           style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-width:2.63930559;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#cccccc;fill-opacity:1;stroke:#cccccc;stroke-width:2.63930559;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            id="path1003"
            cx="598.63202"
            cy="141.02892"
